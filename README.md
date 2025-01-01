@@ -51,6 +51,9 @@ Processing: The system applies OCR, handwriting recognition, and mathematical sy
 Review: The transcription is displayed for review and editing.
 
 Export: Transcriptions can be downloaded in various formats.
+
 Authers: 
+
 Ariel Blinder
+
 Saar Attarchi
