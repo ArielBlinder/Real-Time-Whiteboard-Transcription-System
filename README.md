@@ -1,59 +1,79 @@
-Real-Time Whiteboard Transcription System 🎯
+# Real-Time Whiteboard Transcription System 🎯
 
-Overview 📋
+## Overview 📋
 
-The Real-Time Whiteboard Transcription System is a cutting-edge solution designed to capture and transcribe whiteboard content effortlessly. Whether it’s handwritten notes, mathematical symbols, or multilingual text, this system transforms visual content into organized, editable digital formats (.docx, .pdf, .txt).
+The Real-Time Whiteboard Transcription System is an innovative solution designed to effortlessly capture and transcribe whiteboard content. Whether it’s handwritten notes, mathematical formulas, this system converts visual data into organized, editable digital formats (.docx, .pdf, .txt).
 
-This project aims to simplify lecture documentation, brainstorming sessions, and meetings by leveraging OCR (Optical Character Recognition), AI/ML models, and advanced image processing technologies.
+This project addresses the common challenge faced by students, educators, and professionals in documenting lectures, meetings, and brainstorming sessions. By leveraging advanced OCR (Optical Character Recognition), AI/ML models, and sophisticated image processing, the system ensures high accuracy and efficiency.
 
-Features ✨
+## Features ✨
 
-Real-Time Transcription: Process live video feeds or uploaded images/videos with minimal latency.
+- **Real-Time Transcription:** Processes live video feeds or uploaded images/videos with minimal latency.
+- **Mathematical Formula Recognition:** Accurately transcribes mathematical symbols and equations.
+- **Handwriting Recognition:** Converts handwritten notes into clear, readable digital text.
+- **Content Filtering:** Automatically excludes erased or irrelevant whiteboard content.
+- **Export Options:** Seamlessly exports transcriptions to `.docx`, `.pdf`, or `.txt`.
+- **User-Friendly Interface:** Intuitive and responsive UI designed for easy interaction across various devices.
+- **Editing and Collaboration:** Allows manual text corrections and adding user comments for enhanced collaboration.
 
-Multilingual Support: Recognizes both left-to-right (English) and right-to-left (Hebrew) text.
+## System Architecture 🏗️
 
-Mathematical Formula Recognition: Accurately transcribes symbols and equations.
+The system employs a robust Model-View-Controller (MVC) architecture:
 
-Handwriting Support: Converts handwritten text into readable formats.
+- **Model:**
+  - OCR and handwriting recognition models (TensorFlow/PyTorch).
+  - Processes and filters content to maintain accuracy.
 
-Export Options: Seamlessly export transcriptions to .docx, .pdf, or .txt.
+- **View:**
+  - Responsive interface for uploads, reviewing transcriptions, and configuring export settings.
 
-User-Friendly Interface: Intuitive and responsive UI for effortless interaction.
+- **Controller:**
+  - Manages user interactions, orchestrates OCR processing, and updates views.
 
-System Architecture 🏗️
+## Tech Stack 🛠️
 
-This project utilizes the Model-View-Controller (MVC) architecture:
+- **Frontend:** React.js, Material-UI
+- **Backend:** Python (Flask/Django) or Node.js
+- **AI/ML Tools:** TensorFlow, PyTorch, Tesseract OCR, OpenCV
+- **Data Formats:** `.docx`, `.pdf`, `.txt`
+- **APIs:** FFMPEG (video processing), custom APIs for exporting and user preferences
 
-Model: OCR and handwriting recognition models, content filtering.
+## How It Works 🚀
 
-View: Responsive user interface for uploading and reviewing transcriptions.
+1. **Upload:** Users upload videos, images, or access live video feeds.
+2. **Processing:** The system applies OCR, handwriting recognition, and mathematical symbol detection.
+3. **Review:** Transcribed content is displayed for review, editing, and adding comments.
+4. **Export:** Users download transcriptions in their chosen format.
 
-Controller: Manages user inputs and orchestrates processing.
+## Stakeholders 👥
 
-Tech Stack 🛠️
+- **Students and Educators:** Primary users capturing and utilizing lecture content efficiently.
+- **Educational Institutions:** Enhancing accessibility and documentation of educational materials.
+- **Software Developers:** Building, maintaining, and enhancing the system's capabilities.
 
-Frontend: React.js, Material-UI
+## Expected Challenges ⚠️
 
-Backend: Python (Flask/Django) or Node.js
+- Handwriting recognition accuracy.
+- Handling low-quality images and video frames.
+- Mathematical symbol recognition complexity.
 
-AI/ML Tools: TensorFlow, PyTorch, Tesseract, OpenCV
+## Metrics for Success 📈
 
-Data Formats: .docx, .pdf, .txt
+- **Accuracy Rate:** Evaluation of transcription accuracy across various inputs.
+- **User Feedback:** Gathering feedback on usability and learning impact.
+- **Exported Content Quality:** Meeting users’ expectations for format and organization.
+- **Usability:** Performance evaluation under diverse classroom conditions.
 
-APIs: FFMPEG for video processing, custom APIs for exporting and user preferences
+## Competitor Comparison 🆚
 
-How It Works 🚀
+- **Google Lens:** Limited handwriting support; lacks real-time video capabilities.
+- **Microsoft OCR (Azure):** Costly and requires extensive customization.
+- **OpenCV:** Requires high technical expertise for custom solutions.
 
-Upload: Users upload a video, image, or access a live feed.
+**Our Innovation:** Real-time processing, multilingual and mathematical transcription, intuitive interface, efficient content filtering, and easy exporting capabilities.
 
-Processing: The system applies OCR, handwriting recognition, and mathematical symbol detection.
+## Authors ✏️
 
-Review: The transcription is displayed for review and editing.
+- **Ariel Blinder**
+- **Saar Attarchi**
 
-Export: Transcriptions can be downloaded in various formats.
-
-Authers: 
-
-Ariel Blinder
-
-Saar Attarchi
