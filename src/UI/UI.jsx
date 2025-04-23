@@ -10,7 +10,7 @@ function UI(){
     const [showFile, setShowFile] = useState(false);
 
 
-
+    // chnages file based on input type
     function handleInputOptionChange(e) {
         const comfirmChange = window.confirm("are you sure you want to change type?")
         if(comfirmChange){
