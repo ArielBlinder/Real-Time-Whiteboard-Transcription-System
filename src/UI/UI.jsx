@@ -1,4 +1,4 @@
-npmimport react, {useState} from 'react';
+import react, {useState} from 'react';
 import FilleInputUI from "./FilleInputUI";
 import FileOutputUI from "./FileOuputUI";
 
