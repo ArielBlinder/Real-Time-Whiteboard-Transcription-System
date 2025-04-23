@@ -21,7 +21,7 @@ This project addresses the common challenge faced by students, educators, and pr
 The system employs a robust Model-View-Controller (MVC) architecture:
 
 - **Model:**
-  - OCR and handwriting recognition models (TensorFlow/PyTorch).
+  - OCR and handwriting recognition with Llama 4 LLM
   - Processes and filters content to maintain accuracy.
 
 - **View:**
@@ -33,8 +33,7 @@ The system employs a robust Model-View-Controller (MVC) architecture:
 ## Tech Stack 🛠️
 
 - **Frontend:** React.js, Material-UI
-- **Backend:** Python (Flask/Django) or Node.js
-- **AI/ML Tools:** TensorFlow, PyTorch, Tesseract OCR, OpenCV
+- **Backend:** Python (Flask/Django, and Llama 4 LLM
 - **Data Formats:** `.docx`, `.pdf`, `.txt`
 - **APIs:** FFMPEG (video processing), custom APIs for exporting and user preferences
 
