@@ -9,6 +9,7 @@ import json
 def select_single_image():
     root = tk.Tk()
     root.withdraw()  # Hide the main Tkinter window
+    # test
 
     filetypes = [
         ("Image files", "*.png *.jpg *.jpeg *.bmp *.gif"),
