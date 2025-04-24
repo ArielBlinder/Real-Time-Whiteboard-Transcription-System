@@ -9,6 +9,7 @@ function UI(){
     const [file, setFile] = useState("");
     const [showFile, setShowFile] = useState(false);
     const [generatedText, setGeneratedText] = useState(""); 
+    const [isLoading, setIsLoading] = useState(false);
 
 
 
@@ -27,6 +28,8 @@ function UI(){
     const handleGenerateText = async () => {
         if (!file) return;
 
+        setIsLoading(true)
+
 
         const formData = new FormData();
         formData.append("file", file);
@@ -42,7 +45,10 @@ function UI(){
             setShowFile(true);
         } catch (error) {
             console.error("Upload error:", error);
+        } finally {
+            setIsLoading(false);
         }
+        
     };
 
     const handleFile = (file) => {
@@ -63,7 +69,7 @@ function UI(){
         <>
 
                 <FilleInputUI inputOption={inputOption} handleInputOptionChange={handleInputOptionChange} handleGenerateText={handleGenerateText} onFileChange={handleFile}></FilleInputUI>
-                <FileOutputUI inputOption={inputOption} file={file} showFile={showFile} text={generatedText}></FileOutputUI>
+                <FileOutputUI inputOption={inputOption} file={file} showFile={showFile} generatedText={generatedText} isLoading={isLoading}></FileOutputUI>
         </>
 
 

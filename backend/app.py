@@ -13,6 +13,7 @@ def upload_file():
 
     file = request.files['file']
     result_text = transcribe_image(file)
+    #result_text = "this is generated"   for check
     return jsonify({'text': result_text})
 
 if __name__ == '__main__':
