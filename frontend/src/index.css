@@ -179,12 +179,38 @@ body{
   
 }
 
+#text-area{
+  position: relative;
+}
+
+.edit-button {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
 #text{
   text-align: start;
   white-space: pre-wrap;
   padding: 20px;
   overflow: auto;
   max-height: 50vh;
+}
+
+.editable-textarea {
+  width: 100%;
+  min-height: 100px;
+  height: 100%;
+  padding: 20px;
+  resize: none; 
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: auto;
+  font-family: inherit;
+  font-size: 1rem;
 }
 
 .download-buttons-container{
@@ -220,5 +246,12 @@ body{
 .footer{
   flex: 1;
   padding: 10px;
+}
+
+.spinner{
+  margin-left: 360px;
+  margin-right: 400px;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
