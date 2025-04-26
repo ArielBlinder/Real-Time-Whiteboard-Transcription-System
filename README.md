@@ -21,10 +21,12 @@ This project addresses the common challenge faced by students, educators, and pr
 The system employs a robust Model-View-Controller (MVC) architecture:
 
 - **Model:**
+
   - OCR and handwriting recognition with Llama 4 LLM
   - Processes and filters content to maintain accuracy.
 
 - **View:**
+
   - Responsive interface for uploads, reviewing transcriptions, and configuring export settings.
 
 - **Controller:**
@@ -33,9 +35,19 @@ The system employs a robust Model-View-Controller (MVC) architecture:
 ## Tech Stack 🛠️
 
 - **Frontend:** React.js, Material-UI
-- **Backend:** Python (Flask/Django, and Llama 4 LLM
+- **Backend:** Python (Flask/Django), and Llama 4 LLM
 - **Data Formats:** `.docx`, `.pdf`, `.txt`
 - **APIs:** FFMPEG (video processing), custom APIs for exporting and user preferences
+
+## Requirements Installation 📦
+
+To install the required packages, use the provided `requirements.txt` file:
+
+```bash
+pip install -r requirements.txt
+```
+
+Make sure your Python environment is properly configured.
 
 ## How It Works 🚀
 
@@ -75,4 +87,3 @@ The system employs a robust Model-View-Controller (MVC) architecture:
 
 - **Ariel Blinder**
 - **Saar Attarchi**
-
