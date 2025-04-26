@@ -2,8 +2,17 @@ function About() {
   return (
     <div>
       <h1>BoardCast</h1><br></br>
-      <p>App to trascribe written text to file</p>
-      <p>made by: Saar Attarchi & Ariel Blinder</p>
+      <p>An application designed to transcribe handwritten or visual text into editable files.</p>
+      <p>Our mission is to simplify the way users capture and preserve handwritten notes through fast, accurate transcription.</p>
+      <br />
+      
+       <h3>Developed by:</h3>
+      
+        Saar Attarchi &
+        Ariel Blinder
+        <br></br>
+        <br></br>
+        
       <p>Version: 1.0.0</p><br></br><br></br>
     </div>
   )
