@@ -16,7 +16,7 @@ function UI(){
 
     // chnages file based on input type
     function handleInputOptionChange(e) {
-        const comfirmChange = window.confirm("are you sure you want to change type?")
+        const comfirmChange = window.confirm("Are you sure you want to change the type?")
         if(comfirmChange){
             setInputOption(e.target.value);
             setFile(null);
