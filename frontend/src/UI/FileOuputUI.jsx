@@ -3,7 +3,7 @@ import Spinner from '../layout/Spinner';
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 import { jsPDF } from "jspdf";
-import { FaPen, FaSave } from "react-icons/fa"
+import { FaPen, FaSave, FaFileAlt, FaFileWord, FaFilePdf } from "react-icons/fa"
 
 function FileOutputUI({ inputOption, file, showFile, generatedText, isLoading}) {
 
@@ -23,22 +23,24 @@ function FileOutputUI({ inputOption, file, showFile, generatedText, isLoading}) 
 
 
     const handleExportToDocx = () => {
+        const paragraphs = text.split('\n').map(line =>
+            new Paragraph({
+                children: [new TextRun(line)],
+            })
+        );
+    
         const doc = new Document({
             sections: [
                 {
-                    children: [
-                        new Paragraph({
-                            children: [new TextRun(text)],
-                        }),
-                    ],
+                    children: paragraphs,
                 },
             ],
         });
-
+    
         Packer.toBlob(doc).then(blob => {
             saveAs(blob, "transcription.docx");
         });
-    }
+    };
 
 
     const handleExportToPDF = () => {
@@ -79,9 +81,12 @@ function FileOutputUI({ inputOption, file, showFile, generatedText, isLoading}) 
                             </section>
                         </div>
                         <div className='download-buttons-container'>
-                            <button className='download-buttons' onClick={handleExportToTxt}>download as .txt</button>
-                            <button className='download-buttons' onClick={handleExportToDocx}>download as .docx</button>
-                            <button className='download-buttons' onClick={handleExportToPDF}>download as PDF</button>
+                        <button className='download-buttons' onClick={handleExportToTxt}>
+                        <FaFileAlt size={12} style={{ marginRight: "px" }} />
+                        Download as .txt
+                         </button>
+                            <button className='download-buttons' onClick={handleExportToDocx}>Download as .docx</button>
+                            <button className='download-buttons' onClick={handleExportToPDF}>Download as PDF</button>
                         </div>
                     </div>)}
             </div>
