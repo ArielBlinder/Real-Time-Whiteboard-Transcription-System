@@ -81,12 +81,18 @@ function FileOutputUI({ inputOption, file, showFile, generatedText, isLoading}) 
                             </section>
                         </div>
                         <div className='download-buttons-container'>
-                        <button className='download-buttons' onClick={handleExportToTxt}>
-                        <FaFileAlt size={12} style={{ marginRight: "px" }} />
-                        Download as .txt
-                         </button>
-                            <button className='download-buttons' onClick={handleExportToDocx}>Download as .docx</button>
-                            <button className='download-buttons' onClick={handleExportToPDF}>Download as PDF</button>
+                            <button className='download-buttons' onClick={handleExportToTxt}>
+                                <FaFileAlt size={12} style={{ marginRight: "5px" }} />
+                                Download as .txt
+                            </button>
+                            <button className='download-buttons' onClick={handleExportToDocx}>
+                                <FaFileWord size={12} style={{ marginRight: "5px" }} />
+                                Download as .docx
+                            </button>
+                            <button className='download-buttons' onClick={handleExportToPDF}>
+                                <FaFilePdf size={12} style={{ marginRight: "5px" }} />
+                                Download as PDF
+                            </button>
                         </div>
                     </div>)}
             </div>
