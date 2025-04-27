@@ -1,4 +1,4 @@
-import react, {useState, useEffect} from 'react';
+import react, {useState, useRef} from 'react';
 import FilleInputUI from "./FilleInputUI";
 import FileOutputUI from "./FileOuputUI";
 
@@ -10,9 +10,10 @@ function UI(){
     const [showFile, setShowFile] = useState(false);
     const [generatedText, setGeneratedText] = useState(""); 
     const [isLoading, setIsLoading] = useState(false);
+    const [showLandingPage, setShowLandingPage] = useState(true);
 
 
-
+    const appContentRef = useRef(null);
 
     // chnages file based on input type
     function handleInputOptionChange(e) {
@@ -43,6 +44,7 @@ function UI(){
             const data = await response.json();
             setGeneratedText(data.text); // Show returned text
             setShowFile(true);
+            setShowLandingPage(false)
         } catch (error) {
             console.error("Upload error:", error);
         } finally {
@@ -56,6 +58,20 @@ function UI(){
         setFile(file)
     }
 
+    function handleClearMedia() {
+        const comfirmClear = window.confirm(`Are you sure you want to clear this ${inputOption}?`)
+        if(comfirmClear){
+            setFile(null);
+            setShowFile(false);
+            setGeneratedText("");
+        }
+    } 
+
+    const handleGetStarted = () => {
+        if(appContentRef.current)
+            appContentRef.current.scrollIntoView({behavior: "smooth"})
+    }
+
     // colors
     // #DDF8F2
     // #26A688
@@ -67,9 +83,20 @@ function UI(){
     return (
 
         <>
+            {showLandingPage && (
+                <div className='landing-page'>
+                    <h1>Welcome to BoardCast</h1>
+                    <h3>your tool for transcribing texts</h3>
+                    <p>Upload an image or video and we'll turn it into text!</p>
+                    <button onClick={handleGetStarted}>Get started</button>
+                </div>
+            )}
 
-                <FilleInputUI inputOption={inputOption} handleInputOptionChange={handleInputOptionChange} handleGenerateText={handleGenerateText} onFileChange={handleFile}></FilleInputUI>
+            <div className="app-content" ref={appContentRef}>
+                <FilleInputUI inputOption={inputOption} showFile={showFile} handleInputOptionChange={handleInputOptionChange} handleGenerateText={handleGenerateText} onFileChange={handleFile} handleClearMedia={handleClearMedia}></FilleInputUI>
                 <FileOutputUI inputOption={inputOption} file={file} showFile={showFile} generatedText={generatedText} isLoading={isLoading}></FileOutputUI>
+            </div>
+
         </>
 
 
