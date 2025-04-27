@@ -1,7 +1,7 @@
 import react, {useEffect, useState, useRef} from 'react';
 import { FaUpload } from "react-icons/fa"
 
-function FilleInputUI({ inputOption, handleInputOptionChange, handleGenerateText, onFileChange}) {
+function FilleInputUI({ inputOption, showFile, handleInputOptionChange, handleGenerateText, onFileChange, handleClearMedia}) {
 
     const [inputFile, setInputFile] = useState(null);
     const fileInputRef = useRef(null);
@@ -26,16 +26,23 @@ function FilleInputUI({ inputOption, handleInputOptionChange, handleGenerateText
         fileInputRef.current.click();
     }
 
+    function clearInputFile() {
+        setInputFile(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    }
+
    
 
 
 
     return(
         <div>
-            <h2>Enter a file you want to see in text</h2>
+            <br></br><h2>Enter a file you want to see in text</h2>
             <div className='file-container'>
                 <div className='input-container' onClick={triggerFileInput}>
-                    {inputFile ? <span>Selected file: {inputFile.name}</span> : <><FaUpload style={{margin: "15px", width: "20px", height: "20px"}}></FaUpload> <text>insert {inputOption} to transcribe to text</text></>}
+                    {inputFile ? <span>Selected file: {inputFile.name}</span> : <><FaUpload style={{margin: "15px", width: "20px", height: "20px"}}></FaUpload> <span>insert {inputOption} to transcribe to text</span></>}
                     <input type='file' ref={fileInputRef}  style={{ display: 'none' }} accept={inputOption === "image" ? "image/*" : "video/*"} onChange={handleFileChange}/>
                 </div>
                 <label id="pictureOptn">
@@ -47,7 +54,10 @@ function FilleInputUI({ inputOption, handleInputOptionChange, handleGenerateText
                     Video
                 </label><br></br>
                 <div id="GenerateText">
-                <button className='generated-text-button' type='submit' onClick={handleGenerateText}>Generate Text</button>
+                    {showFile ?
+                        <button className='generated-text-button' type='button' onClick={() => {handleClearMedia(); clearInputFile();}}>Clear Media</button>
+                        :
+                        <button className='generated-text-button' type='button' onClick={handleGenerateText}>Generate Text</button>}
                 </div>
             </div><br></br><br></br>
         </div>

@@ -12,6 +12,7 @@
 
 body{
   font-family: Arial, Helvetica, sans-serif;
+  /* background: linear-gradient(135deg, #74ebd5 0%, #acb6e5 100%); */
 }
 
 .navbar-outer {
@@ -83,9 +84,67 @@ body{
   padding: 0 1rem;
 }
 
+.landing-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+  text-align: center;
+  padding: 20px;
+}
+
+.landing-page h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.landing-page h3 {
+  font-size: 1.5rem;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+.landing-page p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+
+.landing-page button {
+  background-color: #4f46e5;
+  color: white;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.landing-page button:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 12px rgba(79, 70, 229, 0.4);
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.landing-page {
+  animation: fadeIn 1s ease-out;
+}
+
 .file-container{
   font-family: Arial, Helvetica, sans-serif;
-  background-color: hsl(166, 63%, 82%);
+  background-color: hsla(170, 17%, 93%, 0.68);
+  /* background-color: hsl(166, 63%, 82%); */
   border: 1px solid hsl(0, 0%, 42%);
   border-radius: 10px;
   font-size: 1.5rem;
@@ -98,7 +157,7 @@ body{
   margin: 20px 5px;
   padding: 50px;
   background-color: white;
-  border: 1px solid black;
+  border: 2px dashed #9599a1;
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -108,21 +167,32 @@ body{
   cursor: pointer;
 }
 
+.input-container:hover{
+  border-color:  hsl(166, 53%, 62%);
+  background: hsl(220, 5%, 96%);
+}
+
 #pictureOptn{
   margin-right: 10px;
 }
 
 #GenerateText{
   margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+#GenerateText button:hover {
+  transform: scale(1.05);
+  background-color: hsl(166, 63%, 30%);
 }
 
 .generated-text-button{
-  font-size: 1.7rem;
-  font-weight: bold;
+  font-size: 16px;
   padding: 10px 20px;
   color: white;
   background-color: hsl(166, 63%, 40%);
   border: none;
+  margin-top: 5px;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.5s ease;
