@@ -12,14 +12,18 @@
 
 body{
   font-family: Arial, Helvetica, sans-serif;
-  /* background: linear-gradient(135deg, #74ebd5 0%, #acb6e5 100%); */
+  background: linear-gradient(135deg, hsl(210, 80%, 92%), hsl(210, 70%, 85%));
 }
 
 .navbar-outer {
   width: 100%;
-  background-color: hsla(170, 17%, 93%, 0.68);
-  box-shadow: 0 2px 8px rgba(206, 206, 206, 0.2);
-  margin-bottom: 3rem;
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  /* background-color: hsla(220, 17%, 93%, 0.68); */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .navbar{
@@ -28,9 +32,12 @@ body{
   justify-content: space-between;
   width: 100%;
   margin: 0 auto;
-  padding: 0.75rem 1rem;
-  color: hsl(180, 15%, 55%);
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  /* color: hsl(180, 15%, 55%); */
+  color: hsl(229, 25%, 35%);
+  /* color: hsl(0, 0%, 20%); */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -58,23 +65,27 @@ body{
 
 .linkBtn {
   background-color: transparent;
-  color: hsl(180, 15%, 55%);
-  border: 1px solid  hsl(180, 15%, 55%);
-  font-size: 0.875rem; 
-  padding: 0.5rem 0.75rem;
+  color: hsl(229, 25%, 40%);
+  border: 2px solid hsl(229, 25%, 55%);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.6rem 1rem;
   border-radius: 9999px; 
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .linkBtn:hover {
-  background-color:  hsl(180, 15%, 65%);
-  color: hsla(0, 0%, 99%, 0.941);
+  background-color: hsl(229, 25%, 55%);
+  color: white;
+  transform: scale(1.05);
+  /* background-color:  hsl(229, 25%, 65%);
+  color: hsla(0, 0%, 99%, 0.941); */
 }
 
 .linkBtn:active {
-  background-color:  hsl(180, 15%, 55%);
+  background-color:  hsl(229, 25%, 75%);
 }
 
 .content-container {
@@ -90,25 +101,28 @@ body{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #333;
+  color: #2c3e50;
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
 }
 
 .landing-page h1 {
-  font-size: 48px;
-  margin-bottom: 20px;
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #222;
 }
 
 .landing-page h3 {
-  font-size: 1.5rem;
-  color: #444;
-  margin-bottom: 1rem;
+  font-size: 1.75rem;
+  color: #3c4a60;
+  font-weight: 500;
 }
 
 .landing-page p {
-  font-size: 1.2rem;
+  font-size: 1.125rem;
   color: #555;
+  line-height: 1.6;
   margin-bottom: 2rem;
   max-width: 500px;
 }
@@ -116,19 +130,19 @@ body{
 .landing-page button {
   background-color: #4f46e5;
   color: white;
-  padding: 14px 28px;
+  padding: 16px 32px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1.1rem;
   font-weight: bold;
-  text-decoration: none;
-  transition: all 0.3s ease;
+  transition: 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
 
 .landing-page button:hover {
   transform: translateY(-4px) scale(1.05);
+  /* background-color: #4338ca; */
   box-shadow: 0 8px 12px rgba(79, 70, 229, 0.4);
 }
 
@@ -143,34 +157,39 @@ body{
 
 .file-container{
   font-family: Arial, Helvetica, sans-serif;
-  background-color: hsla(229, 17%, 93%, 0.68);
+  background-color: rgba(255, 255, 255, 0.75);
   /* background-color: hsl(166, 63%, 82%); */
-  border: 1px solid hsl(0, 0%, 42%);
+  border: 1px solid hsl(0, 0%, 82%);
   border-radius: 10px;
-  font-size: 1.5rem;
-  padding-bottom: 20px;
-  box-shadow: 5px 10px 15px hsl(0deg 0% 0% / 0.20);
-  margin-top: 20px;
+  font-size: 1.25rem;
+  padding: 20px;
+  box-shadow: 5px 10px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+  transition: transform 0.3s ease;
 }
+
 
 .input-container{
   margin: 20px 5px;
-  padding: 50px;
-  background-color: white;
-  border: 2px dashed #9599a1;
+  padding: 60px;
+  background-color: #f7f7f7;
+  border: 2px dashed #a0a3ad;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
-  color: hsl(0, 0%, 50%);
+  color: #7a7a7a;
   cursor: pointer;
+  /* transition: background-color 0.3s ease; */
 }
 
 .input-container:hover{
   /* border-color:  hsl(166, 53%, 62%); */
-  border-color: hsl(229, 76%, 77%);
-  background: hsl(220, 5%, 96%);
+  background-color: hsl(220, 10%, 96%);
+  border-color: hsl(229, 76%, 65%);
+  /* border-color: hsl(229, 76%, 77%);
+  background: hsl(220, 5%, 96%); */
 }
 
 #pictureOptn{
@@ -215,6 +234,7 @@ body{
 
 .media-output-container{
   margin: 10px 20px;
+  margin-right: 30px;
   flex: 1 1 500px;
   max-width: 100%;
   min-width: 300px;
@@ -226,20 +246,30 @@ body{
   max-height: 90vh;
   object-fit: contain;
   border-radius: 5px;
+  margin-right: 20px;
   margin-top: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.generated-text{
+  margin: 10px 10px;
+  border: none;
+  width: 40%;
+  max-width: 40vw;
+  min-width: 300px;
+
 }
 
 .generated-text-container{
-  background-color: hsla(0, 5%, 77%, 0.195);
-  border: 1px solid black;
-  border-radius: 5px;
-  margin: 20px 0;
-  margin-left: 10px;
-  margin-right: 10px;
+  /* background-color: hsla(0, 5%, 77%, 0.195); */
+  background-color: hsla(229, 33%, 95%, 0.95);
+  border: 1px solid hsl(0, 0%, 75%);
+  border-radius: 12px;
+  margin: 15px 0;
   max-width: 40vw;
   min-height: 400px;
   width: 100%;
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.304);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
 .generated-text-header{
@@ -277,11 +307,13 @@ body{
   min-height: 100px;
   height: 100%;
   padding: 20px;
-  resize: none; 
+  resize: vertical;
   border: 1px solid #ccc;
   border-radius: 6px;
   overflow: auto;
   font-family: inherit;
+  background-color: #f9f9f9;
+  color: #333;
   font-size: 1rem;
 }
 
@@ -294,30 +326,25 @@ body{
   font-weight: bold;
   padding: 10px 20px;
   color: white;
-  background-color: hsl(166, 63%, 40%);
+  /* background-color: hsl(166, 63%, 40%); */
+  background-color: hsl(229, 76%, 60%);
   border: none;
   border-radius: 5px;
-  margin: 3px;
+  margin: 5px;
   max-width: 10vw;
   cursor: pointer;
   transition: background-color 0.5s ease;
 }
 
 .download-buttons:hover{
-  transform: scale(0.98);
-  opacity: 0.9;
-}
-
-.generated-text{
-  border: none;
-  width: 40%;
-  max-width: 40vw;
-  min-width: 300px;
+  background-color: hsl(229, 76%, 50%);
+  transform: scale(1.03);
 }
 
 .footer{
   flex: 1;
-  padding: 10px;
+  padding: 20px 40px;
+  bottom: 0;
 }
 
 .spinner{
