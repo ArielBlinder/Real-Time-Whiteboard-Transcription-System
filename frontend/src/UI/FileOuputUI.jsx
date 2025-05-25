@@ -75,7 +75,7 @@ function FileOutputUI({ inputOption, file, showFile, generatedText, isLoading}) 
                                     {isEditing ? <FaSave size={20} /> : <FaPen size={20} />}
                                 </button>
                                 {isEditing ? (
-                                    <textarea className='editable-textarea' value={text} onChange={(e) => setText(e.target.value)} rows={8}></textarea>
+                                    <textarea className='editable-textarea' value={text} onChange={(e) => setText(e.target.value)} rows={15}></textarea>
                                 ) : (<p id='text'>{text}</p>
                                 )}
                             </section>

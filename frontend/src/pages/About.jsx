@@ -1,7 +1,7 @@
 function About() {
   return (
     <div>
-      <h1>BoardCast</h1><br></br>
+      <br></br><h1>BoardCast</h1><br></br>
       <p>An application designed to transcribe handwritten or visual text into editable files.</p>
       <p>Our mission is to simplify the way users capture and preserve handwritten notes through fast, accurate transcription.</p>
       <br />
