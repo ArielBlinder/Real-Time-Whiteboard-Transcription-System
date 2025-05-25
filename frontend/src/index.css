@@ -143,7 +143,7 @@ body{
 
 .file-container{
   font-family: Arial, Helvetica, sans-serif;
-  background-color: hsla(170, 17%, 93%, 0.68);
+  background-color: hsla(229, 17%, 93%, 0.68);
   /* background-color: hsl(166, 63%, 82%); */
   border: 1px solid hsl(0, 0%, 42%);
   border-radius: 10px;
@@ -168,7 +168,8 @@ body{
 }
 
 .input-container:hover{
-  border-color:  hsl(166, 53%, 62%);
+  /* border-color:  hsl(166, 53%, 62%); */
+  border-color: hsl(229, 76%, 77%);
   background: hsl(220, 5%, 96%);
 }
 
@@ -183,14 +184,15 @@ body{
 
 #GenerateText button:hover {
   transform: scale(1.05);
-  background-color: hsl(166, 63%, 30%);
+  background-color: hsl(229, 76%, 60%);
 }
 
 .generated-text-button{
   font-size: 16px;
   padding: 10px 20px;
   color: white;
-  background-color: hsl(166, 63%, 40%);
+  background-color: hsl(229, 76%, 67%);
+  /* background-color: hsl(166, 63%, 40%); */
   border: none;
   margin-top: 5px;
   border-radius: 5px;
