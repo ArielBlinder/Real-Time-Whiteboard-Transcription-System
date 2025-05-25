@@ -4,6 +4,7 @@ import json
 import requests
 from PIL import Image
 from typing import Union
+from pathlib import Path
 
 # Constants
 MAX_IMAGE_SIZE = (800, 800)
@@ -12,52 +13,57 @@ API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
 API_KEY = "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"
 MODEL_NAME = 'meta/llama-4-scout-17b-16e-instruct'
 
-def prepare_image(file) -> tuple[bool, Union[str, bytes]]:
+def prepare_image(file_or_path) -> tuple[bool, Union[str, bytes]]:
     """
     Prepare and optimize the image for API transmission.
     
     Args:
-        file: The image file to process
+        file_or_path: Either a file object or a path to the image file
         
     Returns:
         tuple: (success, result) where result is either error message or base64 encoded image
     """
     try:
-        with Image.open(file) as img:
-            # Resize image while maintaining aspect ratio
-            img.thumbnail(MAX_IMAGE_SIZE, Image.LANCZOS)
+        # Handle both file objects and file paths
+        if isinstance(file_or_path, (str, Path)):
+            img = Image.open(file_or_path)
+        else:
+            img = Image.open(file_or_path)
             
-            # Convert to RGB if needed
-            if img.mode != 'RGB':
-                img = img.convert('RGB')
+        # Resize image while maintaining aspect ratio
+        img.thumbnail(MAX_IMAGE_SIZE, Image.LANCZOS)
+        
+        # Convert to RGB if needed
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+        
+        # Optimize and encode
+        buffer = io.BytesIO()
+        img.save(buffer, format='JPEG', quality=70)
+        buffer.seek(0)
+        
+        image_b64 = base64.b64encode(buffer.read()).decode()
+        
+        if len(image_b64) >= MAX_BASE64_SIZE:
+            return False, "Image too large after processing"
             
-            # Optimize and encode
-            buffer = io.BytesIO()
-            img.save(buffer, format='JPEG', quality=70)
-            buffer.seek(0)
-            
-            image_b64 = base64.b64encode(buffer.read()).decode()
-            
-            if len(image_b64) >= MAX_BASE64_SIZE:
-                return False, "Image too large after processing"
-                
-            return True, image_b64
-            
+        return True, image_b64
+        
     except Exception as e:
         return False, f"Failed to process image: {str(e)}"
 
-def transcribe_image(file) -> str:
+def transcribe_image(file_or_path) -> str:
     """
     Transcribe handwritten text from an image using NVIDIA's API.
     
     Args:
-        file: The image file containing handwritten text
+        file_or_path: Either a file object or a path to the image file
         
     Returns:
         str: Transcribed text or error message
     """
     # Prepare image
-    success, result = prepare_image(file)
+    success, result = prepare_image(file_or_path)
     if not success:
         return result
     
