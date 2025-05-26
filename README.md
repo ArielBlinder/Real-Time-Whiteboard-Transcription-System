@@ -60,7 +60,7 @@ To set up the development environment and install the required packages:
 1.  **Clone the repository:**
 
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/ArielBlinder/Real-Time-Whiteboard-Transcription-System.git
     cd Real-Time-Whiteboard-Transcription-System
     ```
 
