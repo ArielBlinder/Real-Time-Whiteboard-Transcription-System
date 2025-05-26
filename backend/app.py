@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from process_frames import transcribe_image
+from process_video_text import process_frames_with_gemini
 from video_utils import extract_frames, tmp_dir
 from pathlib import Path
 import os
@@ -13,6 +14,7 @@ def upload_file():
     """
     Handle file upload and transcription requests.
     Supports both image and video files.
+    For videos, processes frames with NVIDIA API then refines with Gemini.
     
     Returns:
         JSON response containing transcribed text or error message
@@ -40,14 +42,29 @@ def upload_file():
                 if not frames:
                     return jsonify({'error': 'No frames extracted from video'}), 400
                 
-                # Process each frame and combine results
-                results = []
+                # Process each frame with NVIDIA API
+                frame_texts = []
                 for frame in frames:
                     result = transcribe_image(frame)
                     if not result.startswith('API request failed') and not result.startswith('Failed to process'):
-                        results.append(result)
+                        frame_texts.append(result)
                 
-                return jsonify({'text': '\n'.join(results)})
+                if not frame_texts:
+                    return jsonify({'error': 'No valid text extracted from video frames'}), 400
+                
+                # Process the combined frame texts with Gemini API
+                try:
+                    processed_text = process_frames_with_gemini(frame_texts)
+                    return jsonify({
+                        'text': processed_text,
+                        'frames_processed': len(frame_texts),
+                        'total_frames': len(frames)
+                    })
+                except ValueError as e:
+                    return jsonify({'error': str(e)}), 500
+                except Exception as e:
+                    return jsonify({'error': f'Gemini processing failed: {str(e)}'}), 500
+                    
             else:
                 # Process as single image
                 result_text = transcribe_image(file_path)
@@ -55,6 +72,11 @@ def upload_file():
 
     except Exception as e:
         return jsonify({'error': f'Processing error: {str(e)}'}), 500
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    """Health check endpoint"""
+    return jsonify({'status': 'healthy', 'message': 'Video transcription service is running'})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
