@@ -6,7 +6,7 @@ from pathlib import Path
 # from docx import Document # DOCX creation disabled
 
 # --- Configuration ---
-OPENROUTER_API_KEY = "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"  # Replace with your API key
+OPENROUTER_API_KEY = "ADD_YOUR_API_KEY_HERE"  # Replace with your API key
 # OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 
