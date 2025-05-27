@@ -1,14 +1,14 @@
-import react, {useState, useRef} from 'react';
+import react, { useState, useRef } from 'react';
 import FilleInputUI from "./FilleInputUI";
 import FileOutputUI from "./FileOuputUI";
 
 
-function UI(){
+function UI() {
 
     const [inputOption, setInputOption] = useState("image");
     const [file, setFile] = useState("");
     const [showFile, setShowFile] = useState(false);
-    const [generatedText, setGeneratedText] = useState(""); 
+    const [generatedText, setGeneratedText] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [showLandingPage, setShowLandingPage] = useState(true);
 
@@ -18,7 +18,7 @@ function UI(){
     // chnages file based on input type
     function handleInputOptionChange(e) {
         const comfirmChange = window.confirm("Are you sure you want to change the type?")
-        if(comfirmChange){
+        if (comfirmChange) {
             setInputOption(e.target.value);
             setFile(null);
             setShowFile(false);
@@ -50,7 +50,7 @@ function UI(){
         } finally {
             setIsLoading(false);
         }
-        
+
     };
 
     const handleFile = (file) => {
@@ -60,16 +60,16 @@ function UI(){
 
     function handleClearMedia() {
         const comfirmClear = window.confirm(`Are you sure you want to clear this ${inputOption}?`)
-        if(comfirmClear){
+        if (comfirmClear) {
             setFile(null);
             setShowFile(false);
             setGeneratedText("");
         }
-    } 
+    }
 
     const handleGetStarted = () => {
-        if(appContentRef.current)
-            appContentRef.current.scrollIntoView({behavior: "smooth"})
+        if (appContentRef.current)
+            appContentRef.current.scrollIntoView({ behavior: "smooth" })
     }
 
     // colors
@@ -86,7 +86,7 @@ function UI(){
             {showLandingPage && (
                 <div className='landing-page'>
                     <h1>Welcome to BoardCast</h1>
-                    <h3>your tool for transcribing texts</h3>
+                    <h3>Your tool for transcribing texts</h3>
                     <p>Upload an image or video and we'll turn it into text!</p>
                     <button onClick={handleGetStarted}>Get started</button>
                 </div>
