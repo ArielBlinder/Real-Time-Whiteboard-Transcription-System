@@ -1,13 +1,25 @@
+# Python
 __pycache__/
 *.pyc
+
+# Node.js / Frontend
+frontend/node_modules/
 frontend/node_modules/.vite/deps/_metadata.json
-backend/__pycache__/video_utils.cpython-312.pyc
-backend/__pycache__/video_utils.cpython-312.pyc
-backend/__pycache__/process_frames.cpython-312.pyc
-backend/__pycache__/video_utils.cpython-312.pyc
-backend/__pycache__/process_frames.cpython-312.pyc
-frontend/node_modules/.vite/deps/_metadata.json
-backend/__pycache__/video_utils.cpython-313.pyc
-backend/__pycache__/process_frames.cpython-313.pyc
-backend/__pycache__/video_utils.cpython-313.pyc
-frontend/node_modules/.vite/deps/_metadata.json
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+*.log
+
+

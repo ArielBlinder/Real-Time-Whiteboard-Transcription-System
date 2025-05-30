@@ -3,30 +3,24 @@ import json
 import os
 from typing import List
 from pathlib import Path
-# from docx import Document # DOCX creation disabled
 
 # --- Configuration ---
-OPENROUTER_API_KEY = "ADD_YOUR_API_KEY_HERE"  # Replace with your API key
-# OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-
-
-#OCR_TEXT_FILE = "text.txt" # Assumes text.txt is in the same directory
-OCR_TEXT_FILE = "output.txt" # Assumes text.txt is in the same directory
-# OUTPUT_DOCX_FILE = "transcription_summary.docx" # DOCX creation disabled
-OUTPUT_AI_FILE = "ai_processed_transcription.txt" # File to save AI's final output
+# Using NVIDIA API key from process_frames.py
+API_KEY = "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"
+API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
 
 def process_frames_with_gemini(frame_texts: List[str]) -> str:
     """
-    Process a list of OCR texts from video frames using Gemini API.
+    Process a list of OCR texts from video frames using NVIDIA's API with Gemini model.
     
     Args:
         frame_texts: List of OCR text results from individual frames
         
     Returns:
-        str: Processed and cleaned transcription from Gemini
+        str: Processed and cleaned transcription from NVIDIA API
     """
-    if not OPENROUTER_API_KEY:
-        raise ValueError("OPENROUTER_API_KEY environment variable is not set")
+    if not API_KEY:
+        raise ValueError("API_KEY is not set")
     
     if not frame_texts:
         return "No frame texts provided for processing"
@@ -80,25 +74,29 @@ def process_frames_with_gemini(frame_texts: List[str]) -> str:
     )
 
     headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json",
+        "Authorization": f"Bearer {API_KEY}",
+        "Accept": "application/json"
     }
         
-    data = {
-        "model": "google/gemini-2.0-flash-exp:free", 
+    payload = {
+        "model": "google/gemma-3-27b-it",
         "messages": [
             {
                 "role": "user",
-                "content": [{"type": "text", "text": ai_prompt}] 
+                "content": ai_prompt
             }
-        ]
+        ],
+        "temperature": 0.2,
+        "top_p": 0.7,
+        "max_tokens": 1024,
+        "stream": False
     }
 
     try:
         response = requests.post(
-            url="https://openrouter.ai/api/v1/chat/completions",
+            url=API_URL,
             headers=headers,
-            data=json.dumps(data),
+            json=payload,
             timeout=180 
         )
         response.raise_for_status()
@@ -108,73 +106,11 @@ def process_frames_with_gemini(frame_texts: List[str]) -> str:
         if response_data.get("choices") and response_data["choices"][0].get("message"):
             return response_data["choices"][0]["message"].get("content", "No content found in response.")
         else:
-            return "No valid response from Gemini API"
+            return "No valid response from NVIDIA API"
         
     except requests.exceptions.RequestException as e:
         return f"API request failed: {str(e)}"
     except json.JSONDecodeError as e:
         return f"Could not decode JSON response: {str(e)}"
     except Exception as e:
-        return f"An unexpected error occurred: {str(e)}"
-
-# Legacy function kept for backward compatibility
-def parse_ocr_file(filepath):
-    """
-    Legacy function for parsing OCR text files.
-    """
-    all_frames_text = []
-    current_frame_content = []
-    capturing_content = False
-
-    if not os.path.exists(filepath):
-        print(f"Error: File not found at {filepath}")
-        return None
-
-    with open(filepath, 'r', encoding='utf-8') as f:
-        for line in f:
-            stripped_line = line.strip()
-            if stripped_line.startswith("Frame ") and stripped_line.endswith("):"):
-                if current_frame_content:
-                    all_frames_text.append("\n".join(current_frame_content))
-                current_frame_content = []
-                capturing_content = True
-            elif stripped_line == "==================================================":
-                if current_frame_content:
-                    all_frames_text.append("\n".join(current_frame_content))
-                current_frame_content = []
-                capturing_content = False
-            elif capturing_content:
-                current_frame_content.append(stripped_line)
-    
-    if current_frame_content:
-        all_frames_text.append("\n".join(current_frame_content))
-
-    return "\n\n---\nNext Frame Content:\n---\n\n".join(filter(None, all_frames_text))
-
-# Legacy main function kept for backward compatibility
-def main():
-    OCR_TEXT_FILE = "output.txt"
-    OUTPUT_AI_FILE = "ai_processed_transcription.txt"
-    
-    if not OPENROUTER_API_KEY:
-        print("Error: The OPENROUTER_API_KEY environment variable is not set.")
-        return
-
-    combined_ocr_text = parse_ocr_file(OCR_TEXT_FILE)
-    if not combined_ocr_text:
-        print(f"Could not read or parse OCR data from {OCR_TEXT_FILE}.")
-        return
-
-    # Process with the legacy approach for file-based processing
-    frame_texts = [combined_ocr_text]
-    result = process_frames_with_gemini(frame_texts)
-    
-    try:
-        with open(OUTPUT_AI_FILE, 'w', encoding='utf-8') as f_out:
-            f_out.write(result)
-        print(f"Successfully saved the AI processed transcription to {OUTPUT_AI_FILE}")
-    except IOError as e:
-        print(f"Error writing AI content to file {OUTPUT_AI_FILE}: {e}")
-
-if __name__ == "__main__":
-    main() 
+        return f"An unexpected error occurred: {str(e)}" 
