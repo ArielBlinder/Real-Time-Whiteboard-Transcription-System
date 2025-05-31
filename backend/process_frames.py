@@ -107,4 +107,4 @@ def transcribe_image(image_input) -> str:
     except json.JSONDecodeError:
         return "Invalid response from API"
     except Exception as e:
-        return f"Unexpected error: {str(e)}"  
+        return f"Unexpected error: {str(e)}"

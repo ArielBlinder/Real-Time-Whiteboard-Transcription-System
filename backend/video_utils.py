@@ -112,4 +112,3 @@ def extract_frames(video_path: Path, dst_folder: Path) -> list[Path]:
 
 def tmp_dir() -> tempfile.TemporaryDirectory:
     return tempfile.TemporaryDirectory(prefix="video_proc_")
-
