@@ -1,4 +1,4 @@
-# Real-Time Whiteboard Transcription System (BoardCast) 🎯
+# Real-Time Whiteboard Transcription System (BoardCast)
 
 ## Overview
 
