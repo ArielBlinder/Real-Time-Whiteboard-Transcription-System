@@ -1,138 +1,192 @@
-# Real-Time Whiteboard Transcription System 🎯
+# Real-Time Whiteboard Transcription System (BoardCast) 🎯
 
-## Overview 📋
+## Overview
 
-The Real-Time Whiteboard Transcription System is an innovative solution designed to effortlessly capture and transcribe whiteboard content. Whether it's handwritten notes, mathematical formulas, or diagrams, this system converts visual data into organized, editable digital formats (.docx, .pdf, .txt).
+**BoardCast** is a real-time whiteboard transcription system that captures handwritten notes, mathematical formulas, and diagrams from images or videos of whiteboards, and transcribes them into organized, editable digital text. The system is designed for students, educators, and professionals to effortlessly document lectures, meetings, and brainstorming sessions.
 
-This project addresses the common challenge faced by students, educators, and professionals in documenting lectures, meetings, and brainstorming sessions. By leveraging advanced Optical Character Recognition (OCR), AI/ML models (specifically Llama 4 LLM), and sophisticated image processing techniques, the system aims for high accuracy and efficiency.
+- **Input:** Upload images or videos, or use a live video feed.
+- **Output:** Download transcriptions as `.docx`, `.pdf`, or `.txt` files.
+- **Core:** Advanced OCR, handwriting, and math recognition using AI/LLM models (Llama 4, Gemini, Nvidia NIM).
+- **Interface:** Modern, user-friendly React web app with editing and export features.
 
-## Features ✨
+---
+
+## Features
 
 - **Real-Time Transcription:** Processes live video feeds or uploaded images/videos with minimal latency.
 - **Mathematical Formula Recognition:** Accurately transcribes mathematical symbols and equations.
 - **Handwriting Recognition:** Converts various handwriting styles into clear, readable digital text.
 - **Content Filtering:** Automatically excludes erased or irrelevant whiteboard content.
-- **Export Options:** Seamlessly exports transcriptions to `.docx`, `.pdf`, or `.txt`.
-- **User-Friendly Interface:** Intuitive and responsive UI designed for easy interaction across various devices.
-- **Editing and Collaboration:** Allows manual text corrections and adding user comments for enhanced collaboration.
+- **Export Options:** Download transcriptions as `.docx`, `.pdf`, or `.txt`.
+- **User-Friendly Interface:** Responsive UI for easy interaction and review.
+- **Editing and Collaboration:** Edit transcriptions and add comments before export.
 
-## System Architecture 🏗️
+---
 
-The system employs a robust Model-View-Controller (MVC) architecture:
-
-- **Model:**
-
-  - OCR and handwriting recognition powered by Llama 4 LLM.
-  - Advanced image processing for content enhancement and noise reduction.
-  - Filtering algorithms to exclude erased or irrelevant whiteboard content.
-
-- **View:**
-
-  - Intuitive and responsive web interface built with React.js and Material-UI.
-  - Allows users to upload media, monitor transcription progress, review and edit results, and configure export settings.
-
-- **Controller:**
-  - Manages user interactions, orchestrates OCR processing, and updates views.
-
-## Tech Stack 🛠️
+## System Architecture
 
 - **Frontend:** React.js, Material-UI
-- **Backend:** Python,Flask, Llama 4 LLM
-- **Video Processing:** FFMPEG
-- **APIs:** Nvidia NIM and OpenRouter.
+- **Backend:** Python (Flask), Llama 4 Scout LLM, Gemini 2.0 flash
+- **Video Processing:** FFMPEG (frame extraction, enhancement)
+- **APIs:** Nvidia NIM for Llama 4 Scout , OpenRouter for Gemini 2.0 flash
 
-## Project Structure 📂
+### Project Structure
 
-The project is organized into the following main directories:
+```
+/Backend        # Python Flask server, OCR, AI/LLM integration
+/Frontend       # React.js web application
+/Docs           # Additional documentation and design docs
+/requirements.txt # Python dependencies for backend
+/launcher.py    # Windows launcher for both frontend and backend
+/start_app.bat  # Batch file to launch the app on Windows
+/LICENSE        # MIT License
+```
 
-- **`/Frontend`**: Contains the React.js application for the user interface.
-- **`/Backend`**: Houses the Python server with Flask and core transcription logic, including Llama 4 LLM integration.
-- **`/video process`**: Includes scripts and tools related to video capture and pre-processing using FFMPEG.
-- **`/Docs`**: Contains additional documentation, design documents, or user guides.
-- **`/requirements.txt`**: Lists the Python dependencies for the backend.
-- **`README.md`**: This file, providing an overview of the project.
-- **`LICENSE`**: Contains the project's license information.
+---
 
-## Requirements Installation 📦
+## Installation & Setup
 
-To set up the development environment and install the required packages:
+### 1. Clone the Repository
 
-1.  **Clone the repository:**
+```bash
+git clone https://github.com/ArielBlinder/Real-Time-Whiteboard-Transcription-System.git
+cd Real-Time-Whiteboard-Transcription-System
+```
 
-    ```bash
-    git clone https://github.com/ArielBlinder/Real-Time-Whiteboard-Transcription-System.git
-    cd Real-Time-Whiteboard-Transcription-System
-    ```
+### 2. Backend Setup (Python)
 
-2.  **Backend (Python):**
-    Ensure you have Python 3.8+ installed.
-    Navigate to the `Backend` directory (if applicable, otherwise run from root) and install dependencies:
+- **Requirements:** Python 3.8+
+- **Install dependencies:**
 
-    ```bash
-    # Assuming requirements.txt is in the root or Backend
-    pip install -r requirements.txt
-    ```
+```bash
+pip install -r requirements.txt
+```
 
-    _(Note: If `requirements.txt` is specific to the Backend, adjust the path accordingly. Consider having separate requirements for `video process` if needed.)_
+- **API Keys:**
+  - Set your Nvidia NIM API key in `Backend/process_frames.py` (`API_KEY`)
+  - Set your OpenRouter (Gemini) API key in `Backend/process_video_text.py` (`OPENROUTER_API_KEY`)
+  - _For production, use environment variables or a `.env` file for security._
 
-3.  **Frontend (React.js):**
-    Ensure you have Node.js and npm/yarn installed.
-    Navigate to the `Frontend` directory:
+### 3. Frontend Setup (React)
 
-    ```bash
-    cd Frontend
-    npm install
-    # or
-    # yarn install
-    ```
+- **Requirements:** Node.js (v18+), npm or yarn
+- **Install dependencies:**
 
-4.  **FFMPEG:**
-    FFMPEG must be installed and accessible in your system's PATH. Installation instructions vary by operating system. Refer to the [official FFMPEG website](https://ffmpeg.org/download.html) for details.
+```bash
+cd Frontend
+npm install
+# or
+yarn install
+```
 
-## How It Works 🚀
+### 4. FFMPEG
 
-1.  **Input:** Users can upload video files (e.g., `.mp4`, `.avi`), images (e.g., `.jpg`, `.png`), or connect a live video feed.
-2.  **Preprocessing:** The `video process` module (utilizing FFMPEG) handles video stream decoding, frame extraction, and initial image enhancements.
-3.  **Core Processing (Backend):**
-    - Selected frames or images are sent to the backend.
-    - The Llama 4 LLM performs OCR, handwriting recognition, and mathematical symbol detection.
-    - Content filtering algorithms remove noise and irrelevant information.
-4.  **Review & Edit (Frontend):** The transcribed content is displayed on the user-friendly interface. Users can review, make corrections, and add comments.
-5.  **Export:** Users can download the final transcription in their preferred format (`.docx`, `.pdf`, `.txt`).
+- **Required for video processing.**
+- [Download FFMPEG](https://ffmpeg.org/download.html) and ensure `ffmpeg` and `ffprobe` are in your system PATH.
 
-## Usage (Running the Project) 🏃‍♂️
+### 5. Quick Start (Windows)
 
-(Detailed instructions on how to start the backend server and the frontend development server will be added here. This typically involves commands like `python app.py` or `flask run` for the backend, and `npm start` or `yarn start` for the frontend.)
+- Double-click `start_app.bat` to launch both frontend and backend, and open the app in your browser.
 
-## Stakeholders 👥
+### 6. Manual Start (All Platforms)
 
-- **Students and Educators:** Primary users capturing and utilizing lecture content efficiently.
-- **Educational Institutions:** Enhancing accessibility and documentation of educational materials.
-- **Software Developers:** Building, maintaining, and enhancing the system's capabilities.
+- **Backend:**
+  ```bash
+  cd Backend
+  python app.py
+  ```
+- **Frontend:**
+  ```bash
+  cd Frontend
+  npm run dev
+  # or
+  yarn dev
+  ```
+- Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-## Expected Challenges ⚠️
+---
 
-- Handling diverse handwriting styles and low-quality images/video frames.
-- Ensuring real-time performance with complex mathematical symbol recognition.
-- Scalability of the system to handle multiple users and large files.
+## Usage
 
-## Metrics for Success 📈
+1. **Upload** an image or video of a whiteboard, or select a video.
+2. **Transcription** is performed automatically.
+3. **Review & Edit** the generated text. Make corrections or add comments as needed.
+4. **Export** the final transcription as `.docx`, `.pdf`, or `.txt`.
 
-- **Transcription Accuracy Rate:** Quantitative evaluation of transcription accuracy (e.g., Word Error Rate, Character Error Rate) across diverse inputs (handwriting, print, mathematical formulas).
-- **Processing Speed:** Time taken from input to final transcription output.
-- **User Satisfaction:** Feedback collected through surveys and usability testing on the interface, features, and overall experience.
-- **Exported Content Quality:** Assessment of the accuracy, formatting, and completeness of the exported `.docx`, `.pdf`, and `.txt` files.
-- **System Robustness:** Performance evaluation under various conditions, including low-quality inputs and concurrent user access.
+---
 
-## Competitor Comparison 🆚
+## Example
 
-- **Google Lens:** Limited handwriting support; lacks real-time video capabilities.
-- **Microsoft OCR (Azure):** Costly and requires extensive customization.
-- **OpenCV:** Requires high technical expertise for custom solutions.
+- Upload a `.jpg` or `.mp4` file.
+- Wait for processing (OCR + AI processing).
+- Edit the result if needed.
+- Download as your preferred format.
 
-**Our Innovation:** Combines real-time processing capabilities with robust multilingual and mathematical transcription, an intuitive user interface, efficient content filtering, and flexible export options, setting it apart from existing solutions.
+---
 
-## Authors ✏️
+## Requirements
+
+- Python 3.8+
+- Node.js 18+
+- FFMPEG (in PATH)
+- Nvidia NIM API key
+- OpenRouter API key
+
+### Python Dependencies (from `requirements.txt`)
+
+- Flask, flask-cors, python-docx, pypdf, Pillow, requests, opencv-python, numpy, python-dotenv, pyinstaller, psutil, pywin32
+
+### Frontend Dependencies (from `package.json`)
+
+- React, react-dom, react-icons, docx, file-saver, jspdf, @fortawesome/free-solid-svg-icons, react-router-dom, etc.
+
+---
+
+## Testing & Development
+
+- **Integration Test:**
+  - Run `Backend/test_integration.py` to verify API and AI integration.
+  - Ensure API keys are set before running tests.
+- **Frontend:**
+  - Use `npm run dev` for hot-reload development.
+- **Backend:**
+  - Use `python app.py` for local development (auto-reloads with `debug=True`).
+
+---
+
+## Contribution Guidelines
+
+1. Fork the repository and create a new branch for your feature or bugfix.
+2. Write clear, well-documented code and update/add tests as needed.
+3. Ensure your code passes all tests and does not break existing functionality.
+4. Submit a pull request with a clear description of your changes.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
+
+---
+
+## Authors & Credits
 
 - **Ariel Blinder**
 - **Saar Attarchi**
+
+---
+
+## Troubleshooting & FAQ
+
+- **FFMPEG not found:** Ensure `ffmpeg` and `ffprobe` are installed and in your system PATH.
+- **API errors:** Double-check your API keys and network connection.
+- **Windows users:** Use `start_app.bat` for easiest startup.
+- **Other issues:** Please open an issue or check the [Docs](./Docs) folder for more details.
+
+---
+
+## Related & Further Reading
+
+- See `/Docs` for detailed design, requirements, and competitor analysis.
+- For FFMPEG help: [FFMPEG Documentation](https://ffmpeg.org/documentation.html)
+- For Nvidia NIM and OpenRouter API docs, see their respective official sites.
