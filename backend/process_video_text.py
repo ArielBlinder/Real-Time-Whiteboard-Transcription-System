@@ -34,35 +34,34 @@ def process_frames_with_gemini(frame_texts: List[str]) -> str:
     
     # Define the AI prompt for processing the OCR results
     ai_prompt = (
-        """**Role:** You are an expert AI assistant specializing in processing and refining OCR (Optical Character Recognition) output from whiteboard lectures. These lectures are captured frame by frame, and the content is mathematical, including formulas, definitions, explanations, and accompanying text.
+        """**Role:** You are an expert AI assistant specializing in processing and refining OCR (Optical Character Recognition) output from whiteboard lectures. These lectures are captured frame by frame, and the content is mathematical, including formulas, definitions, and explanations.
 
 **Context:** The provided input is a collation of OCR text from sequential frames of a whiteboard. This means:
-* Content is incrementally added across frames.
-* Later frames may repeat earlier content while introducing new additions.
-* Concepts, formulas, or explanations may begin in one frame and be completed or refined in subsequent frames.
-* The input contains frame markers (e.g., Frame Y:) and visual separators (==================================================), which are part of the OCR capture process and not part of the actual lecture content.
+* Content is generally added incrementally.
+* Later frames often repeat content from earlier frames, along with new additions.
+* Sometimes, a concept or formula might be written partially in one frame and completed or elaborated upon in a subsequent frame.
+* The input text includes frame markers (e.g., `Frame Y:`) and separators (`==================================================`) which are part of the OCR capture process, not the lecture content itself.
 
-**Your task is to carefully transform this raw, sequential OCR output into a single, clean, logically ordered, and accurate transcription of the complete lecture—as if it were professionally edited lecture notes.
+**Primary Goal:** Your task is to meticulously transform this raw, sequential OCR data into a single, clean, logically ordered, and accurate transcription of the entire lecture, as if it were a well-edited set of lecture notes.
 
 **Detailed Instructions:**
 
-1.  **Analyze Full Context:** Carefully process the full set of frames, understanding the progression and cumulative nature of the lecture.
+1.  **Analyze Full Context:** Process the entire provided OCR text, considering all frames and their sequence.
 2.  **Identify and Eliminate Redundancy:**
-    * Detect all repeated, overlapping, or duplicated content across frames.
-    * Ensure that each piece of information—whether textual or mathematical—appears only once in the final transcript.
+    * Identify all instances of duplicated or overlapping content across the frames.
+    * Your main goal is to ensure that each piece of information from the lecture appears only once in the final output.
 3.  **Retain Completeness and Accuracy (Handling Evolving Text):**
-    * Preserve the most complete and accurate version of each segment (e.g., definitions, formulas, or explanations).
-    * If a segment is introduced partially in one frame and completed or clarified later, include only the final, complete version.
-    * Do not replace a complete version with a partial one from a later frame unless it clearly corrects or refines the content.
+    * For each unique segment of the lecture (e.g., a definition, a formula, an example), ensure you keep the most complete and correct version.
+    * If a piece of information is introduced partially and then completed or refined in a later frame, the final transcript should reflect that completed/refined version.
+    * Conversely, if a complete piece of information is already transcribed, do not replace it with a partial or summarized version from a later frame unless it's a clear correction.
 4.  **Sequential Reconstruction:**
-    * Organize the cleaned segments in a logical and chronological order, reflecting how the lecture builds over time.
-    * Ensure smooth progression of ideas, explanations, and formulas.
+    * Reconstruct the lecture by arranging the unique, complete segments in their logical and chronological order of appearance.
 5.  **Preserve Mathematical Notation:**
-    * Accurately preserve all mathematical expressions, symbols, and notation as captured.
-    * Ensure that mathematical notation is correctly rendered and readable.
+    * All mathematical notations must be accurately preserved.
+    * Maintain LaTeX-style syntax if present in the input, ensuring consistency for mathematical expressions.
 6.  **Structure and Formatting:**
-    * Present the final transcription as a continuous, well-structured document.
-    * Use appropriate paragraph breaks and spacing to enhance readability and comprehension.
+    * Present the final transcription as a continuous text.
+    * Use line breaks and paragraphing thoughtfully to enhance readability.
 7.  **Output Constraints:**
     * The output must *only* be the final, cleaned transcription of the lecture content.
     * Do *not* include any frame markers, frame numbers, or separators from the input.
@@ -150,4 +149,4 @@ def make_api_request_with_retry(url: str, headers: dict, data: dict, max_retries
             time.sleep(delay)
             delay *= 2  # Exponential backoff
             
-    raise requests.exceptions.RequestException("Max retries exceeded") 
+    raise requests.exceptions.RequestException("Max retries exceeded")

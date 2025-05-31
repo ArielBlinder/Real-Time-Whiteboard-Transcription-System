@@ -52,6 +52,14 @@ def cleanup(processes):
             pass
 
 def main():
+    # Display startup message
+    print("\n🚀 BoardCast")
+    print("=" * 50)
+    cpu_cores = os.cpu_count() or 4
+    print(f"💻 System: {cpu_cores} CPU cores detected")
+    print("🌐 Starting server...")
+    print("=" * 50 + "\n")
+    
     # Store original directory
     original_dir = os.getcwd()
     
@@ -59,7 +67,6 @@ def main():
     frontend_process = run_frontend()
     
     # Wait a bit for frontend to start
-    time.sleep(5)
     
     # Go back to original directory
     os.chdir(original_dir)
@@ -72,10 +79,10 @@ def main():
     atexit.register(cleanup, processes)
     
     # Open browser after a short delay
-    time.sleep(2)
     webbrowser.open('http://localhost:5173')
     
-    print("Application started! Press Ctrl+C to stop all servers.")
+    print("Application Working!")
+    print("Press Ctrl+C to stop all server.")
     
     try:
         # Keep the script running

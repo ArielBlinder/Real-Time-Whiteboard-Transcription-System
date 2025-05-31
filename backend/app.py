@@ -12,11 +12,12 @@ app = Flask(__name__)
 CORS(app)
 
 def get_optimal_workers() -> int:
+    """
+    Calculate optimal number of workers based on system resources and API constraints.
     
-    # Calculate optimal number of workers based on system resources and API constraints.
-    
-    # Returns: int: Optimal number of worker threads
-    
+    Returns:
+        int: Optimal number of worker threads
+    """
     # Get CPU core count
     cpu_cores = os.cpu_count() or 4  # Fallback to 4 if detection fails
     
@@ -45,27 +46,30 @@ def get_optimal_workers() -> int:
     return optimal_workers
 
 def process_frame_with_order(frame_data: Tuple[int, any]) -> Tuple[int, str]:
+    """
+    Process a single frame and return the result with its original order index.
     
-    # Process a single frame and return the result with its original order index.
-    
-    # Args:frame_data: Tuple of (frame_number, PIL_Image)
+    Args:
+        frame_data: Tuple of (frame_number, PIL_Image)
         
-    # Returns:Tuple of (frame_number, transcribed_text)
-    
+    Returns:
+        Tuple of (frame_number, transcribed_text)
+    """
     frame_number, frame_image = frame_data
     transcribed_text = transcribe_image(frame_image)
     return frame_number, transcribed_text
 
 def process_video_frames_parallel(frames: List[Tuple[int, any]], max_workers: int = None) -> List[str]:
+    """
+    Process video frames in parallel while maintaining chronological order.
     
-    # Process video frames in parallel while maintaining chronological order.
-    
-    # Args:
-    # frames: List of (frame_number, PIL_Image) tuples
-    # max_workers: Maximum number of parallel workers (auto-calculated if None)
+    Args:
+        frames: List of (frame_number, PIL_Image) tuples
+        max_workers: Maximum number of parallel workers (auto-calculated if None)
         
-    # Returns: List of transcribed texts in chronological order
-    
+    Returns:
+        List of transcribed texts in chronological order
+    """
     if not frames:
         return []
     
@@ -110,15 +114,14 @@ def process_video_frames_parallel(frames: List[Tuple[int, any]], max_workers: in
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-
-    # Handle file upload and transcription requests.
+    """
+    Handle file upload and transcription requests.
+    Supports both image and video files.
+    For videos, processes frames in parallel with NVIDIA API then refines with Gemini.
     
-    # Supports both image and video files.
-    
-    # For videos, processes frames in parallel with NVIDIA API then refines with Gemini.
-    
-    # Returns: JSON response containing transcribed text or error message
-
+    Returns:
+        JSON response containing transcribed text or error message
+    """
     try:
         if 'file' not in request.files:
             return jsonify({'error': 'No file uploaded'}), 400
@@ -178,12 +181,12 @@ def upload_file():
 
 @app.route('/health', methods=['GET'])
 def health_check():
-    # Health check endpoint
+    """Health check endpoint"""
     return jsonify({'status': 'healthy', 'message': 'Video transcription service is running'})
 
 @app.route('/system-info', methods=['GET'])
 def system_info():
-    # Get system information and current optimization settings
+    """Get system information and current optimization settings"""
     cpu_cores = os.cpu_count() or 4
     optimal_workers = get_optimal_workers()
     
@@ -193,5 +196,5 @@ def system_info():
         'status': 'System optimized for parallel processing'
     })
 
-if __name__ == '__main__':
+if __name__ == '__main__': 
     app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
