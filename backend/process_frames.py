@@ -14,22 +14,26 @@ API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
 API_KEY = "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"
 MODEL_NAME = 'meta/llama-4-scout-17b-16e-instruct'
 
-def prepare_image(file_or_path) -> tuple[bool, Union[str, bytes]]:
+def prepare_image(image_input) -> tuple[bool, Union[str, bytes]]:
     """
     Prepare and optimize the image for API transmission.
     
     Args:
-        file_or_path: Either a file object or a path to the image file
+        image_input: Either a PIL Image object, file object, or a path to the image file
         
     Returns:
         tuple: (success, result) where result is either error message or base64 encoded image
     """
     try:
-        # Handle both file objects and file paths
-        if isinstance(file_or_path, (str, Path)):
-            img = Image.open(file_or_path)
+        # Handle PIL Image objects directly
+        if isinstance(image_input, Image.Image):
+            img = image_input.copy()
+        # Handle file paths
+        elif isinstance(image_input, (str, Path)):
+            img = Image.open(image_input)
+        # Handle file objects
         else:
-            img = Image.open(file_or_path)
+            img = Image.open(image_input)
             
         # Resize image while maintaining aspect ratio
         img.thumbnail(MAX_IMAGE_SIZE, Image.LANCZOS)
@@ -53,18 +57,18 @@ def prepare_image(file_or_path) -> tuple[bool, Union[str, bytes]]:
     except Exception as e:
         return False, f"Failed to process image: {str(e)}"
 
-def transcribe_image(file_or_path) -> str:
+def transcribe_image(image_input) -> str:
     """
     Transcribe handwritten text from an image using NVIDIA's API.
     
     Args:
-        file_or_path: Either a file object or a path to the image file
+        image_input: PIL Image object, file object, or path to the image file
         
     Returns:
         str: Transcribed text or error message
     """
     # Prepare image
-    success, result = prepare_image(file_or_path)
+    success, result = prepare_image(image_input)
     if not success:
         return result
     

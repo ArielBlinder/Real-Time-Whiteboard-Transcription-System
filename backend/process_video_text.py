@@ -1,26 +1,24 @@
 import requests
 import json
 import os
+import time
 from typing import List
-from pathlib import Path
 
-# --- Configuration ---
-# Using NVIDIA API key from process_frames.py
-API_KEY = "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"
-API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
+# IMPORTANT: Replace with your API key, Get it from https://openrouter.ai/
+OPENROUTER_API_KEY = "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" 
 
 def process_frames_with_gemini(frame_texts: List[str]) -> str:
     """
-    Process a list of OCR texts from video frames using NVIDIA's API with Gemini model.
+    Process a list of OCR texts from video frames using Gemini API.
     
     Args:
-        frame_texts: List of OCR text results from individual frames
+        frame_texts: List of OCR text results from individual frames (already ordered chronologically)
         
     Returns:
-        str: Processed and cleaned transcription from NVIDIA API
+        str: Processed and cleaned transcription from Gemini
     """
-    if not API_KEY:
-        raise ValueError("API_KEY is not set")
+    if not OPENROUTER_API_KEY:
+        raise ValueError("OPENROUTER_API_KEY environment variable is not set")
     
     if not frame_texts:
         return "No frame texts provided for processing"
@@ -36,34 +34,35 @@ def process_frames_with_gemini(frame_texts: List[str]) -> str:
     
     # Define the AI prompt for processing the OCR results
     ai_prompt = (
-        """**Role:** You are an expert AI assistant specializing in processing and refining OCR (Optical Character Recognition) output from whiteboard lectures. These lectures are captured frame by frame, and the content is mathematical, including formulas, definitions, and explanations.
+        """**Role:** You are an expert AI assistant specializing in processing and refining OCR (Optical Character Recognition) output from whiteboard lectures. These lectures are captured frame by frame, and the content is mathematical, including formulas, definitions, explanations, and accompanying text.
 
 **Context:** The provided input is a collation of OCR text from sequential frames of a whiteboard. This means:
-* Content is generally added incrementally.
-* Later frames often repeat content from earlier frames, along with new additions.
-* Sometimes, a concept or formula might be written partially in one frame and completed or elaborated upon in a subsequent frame.
-* The input text includes frame markers (e.g., `Frame Y:`) and separators (`==================================================`) which are part of the OCR capture process, not the lecture content itself.
+* Content is incrementally added across frames.
+* Later frames may repeat earlier content while introducing new additions.
+* Concepts, formulas, or explanations may begin in one frame and be completed or refined in subsequent frames.
+* The input contains frame markers (e.g., Frame Y:) and visual separators (==================================================), which are part of the OCR capture process and not part of the actual lecture content.
 
-**Primary Goal:** Your task is to meticulously transform this raw, sequential OCR data into a single, clean, logically ordered, and accurate transcription of the entire lecture, as if it were a well-edited set of lecture notes.
+**Your task is to carefully transform this raw, sequential OCR output into a single, clean, logically ordered, and accurate transcription of the complete lecture—as if it were professionally edited lecture notes.
 
 **Detailed Instructions:**
 
-1.  **Analyze Full Context:** Process the entire provided OCR text, considering all frames and their sequence.
+1.  **Analyze Full Context:** Carefully process the full set of frames, understanding the progression and cumulative nature of the lecture.
 2.  **Identify and Eliminate Redundancy:**
-    * Identify all instances of duplicated or overlapping content across the frames.
-    * Your main goal is to ensure that each piece of information from the lecture appears only once in the final output.
+    * Detect all repeated, overlapping, or duplicated content across frames.
+    * Ensure that each piece of information—whether textual or mathematical—appears only once in the final transcript.
 3.  **Retain Completeness and Accuracy (Handling Evolving Text):**
-    * For each unique segment of the lecture (e.g., a definition, a formula, an example), ensure you keep the most complete and correct version.
-    * If a piece of information is introduced partially and then completed or refined in a later frame, the final transcript should reflect that completed/refined version.
-    * Conversely, if a complete piece of information is already transcribed, do not replace it with a partial or summarized version from a later frame unless it's a clear correction.
+    * Preserve the most complete and accurate version of each segment (e.g., definitions, formulas, or explanations).
+    * If a segment is introduced partially in one frame and completed or clarified later, include only the final, complete version.
+    * Do not replace a complete version with a partial one from a later frame unless it clearly corrects or refines the content.
 4.  **Sequential Reconstruction:**
-    * Reconstruct the lecture by arranging the unique, complete segments in their logical and chronological order of appearance.
+    * Organize the cleaned segments in a logical and chronological order, reflecting how the lecture builds over time.
+    * Ensure smooth progression of ideas, explanations, and formulas.
 5.  **Preserve Mathematical Notation:**
-    * All mathematical notations must be accurately preserved.
-    * Maintain LaTeX-style syntax if present in the input, ensuring consistency for mathematical expressions.
+    * Accurately preserve all mathematical expressions, symbols, and notation as captured.
+    * Ensure that mathematical notation is correctly rendered and readable.
 6.  **Structure and Formatting:**
-    * Present the final transcription as a continuous text.
-    * Use line breaks and paragraphing thoughtfully to enhance readability.
+    * Present the final transcription as a continuous, well-structured document.
+    * Use appropriate paragraph breaks and spacing to enhance readability and comprehension.
 7.  **Output Constraints:**
     * The output must *only* be the final, cleaned transcription of the lecture content.
     * Do *not* include any frame markers, frame numbers, or separators from the input.
@@ -74,43 +73,81 @@ def process_frames_with_gemini(frame_texts: List[str]) -> str:
     )
 
     headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Accept": "application/json"
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
     }
         
-    payload = {
-        "model": "google/gemma-3-27b-it",
+    data = {
+        "model": "google/gemini-2.0-flash-exp:free", 
         "messages": [
             {
                 "role": "user",
-                "content": ai_prompt
+                "content": [{"type": "text", "text": ai_prompt}] 
             }
-        ],
-        "temperature": 0.2,
-        "top_p": 0.7,
-        "max_tokens": 1024,
-        "stream": False
+        ]
     }
 
     try:
-        response = requests.post(
-            url=API_URL,
+        response = make_api_request_with_retry(
+            url="https://openrouter.ai/api/v1/chat/completions",
             headers=headers,
-            json=payload,
-            timeout=180 
+            data=data
         )
-        response.raise_for_status()
 
         response_data = response.json()
         
         if response_data.get("choices") and response_data["choices"][0].get("message"):
-            return response_data["choices"][0]["message"].get("content", "No content found in response.")
+            result = response_data["choices"][0]["message"].get("content", "No content found in response.")
+            return result
         else:
-            return "No valid response from NVIDIA API"
+            return "No valid response from Gemini API"
         
     except requests.exceptions.RequestException as e:
         return f"API request failed: {str(e)}"
     except json.JSONDecodeError as e:
         return f"Could not decode JSON response: {str(e)}"
     except Exception as e:
-        return f"An unexpected error occurred: {str(e)}" 
+        return f"An unexpected error occurred: {str(e)}"
+
+def make_api_request_with_retry(url: str, headers: dict, data: dict, max_retries: int = 3, initial_delay: float = 1.0) -> requests.Response:
+    """
+    Make an API request with exponential backoff retry logic for rate limiting.
+    
+    Args:
+        url: The API endpoint URL
+        headers: Request headers
+        data: Request data
+        max_retries: Maximum number of retry attempts
+        initial_delay: Initial delay in seconds before first retry
+        
+    Returns:
+        requests.Response: The API response
+    """
+    delay = initial_delay
+    
+    for attempt in range(max_retries):
+        try:
+            response = requests.post(
+                url=url,
+                headers=headers,
+                data=json.dumps(data),
+                timeout=180
+            )
+            
+            # If we get a 429, wait and retry
+            if response.status_code == 429:
+                if attempt < max_retries - 1:  # Don't sleep on the last attempt
+                    time.sleep(delay)
+                    delay *= 2  # Exponential backoff
+                    continue
+                    
+            response.raise_for_status()
+            return response
+            
+        except requests.exceptions.RequestException as e:
+            if attempt == max_retries - 1:  # Last attempt
+                raise e
+            time.sleep(delay)
+            delay *= 2  # Exponential backoff
+            
+    raise requests.exceptions.RequestException("Max retries exceeded") 
