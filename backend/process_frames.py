@@ -11,7 +11,7 @@ MAX_IMAGE_SIZE = (800, 800)
 MAX_BASE64_SIZE = 180_000
 API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
 # IMPORTANT: Replace with your API key, Get it from https://build.nvidia.com/settings/api-keys
-API_KEY = "ADD_KEY_HERE"
+NVIDIA_API_KEY = "ADD_KEY_HERE"
 MODEL_NAME = 'meta/llama-4-scout-17b-16e-instruct'
 
 def prepare_image(image_input) -> tuple[bool, Union[str, bytes]]:
@@ -74,7 +74,7 @@ def transcribe_image(image_input) -> str:
     
     # Prepare API request
     headers = {
-        "Authorization": f"Bearer {API_KEY}",
+        "Authorization": f"Bearer {NVIDIA_API_KEY}",
         "Accept": "application/json"
     }
     
