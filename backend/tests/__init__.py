@@ -1,14 +1,16 @@
 """
-Testing package for Real-Time Whiteboard Transcription System
+Real-Time Whiteboard Transcription System - Test Suite
 
-This package contains comprehensive unit tests, integration tests,
-and testing utilities for the transcription system.
+This package contains comprehensive tests for the whiteboard transcription system,
+including unit tests, integration tests, and performance tests.
 
-Test Files:
-- test_transcription_system.py: 20 unit tests covering all modules
-- test_integration.py: Integration tests for API workflows
-- run_tests.py: Advanced test runner with coverage and performance testing
+Test Categories:
+- Unit Tests: Fast, isolated tests with mocked dependencies
+- Integration Tests: End-to-end tests with real API calls
+- Performance Tests: Benchmarking and scaling tests
+
+Run with: python -m pytest tests/test_boardcast.py -v
 """
 
 __version__ = "1.0.0"
-__author__ = "Real-Time Whiteboard Transcription System" 
+__author__ = "Ariel Blinder & Saar Attarchi" 
