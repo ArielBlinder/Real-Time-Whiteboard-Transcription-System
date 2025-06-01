@@ -1,5 +1,7 @@
 # Python
 __pycache__/
+.pytest_cache
+htmlcov/
 *.pyc
 
 # Node.js / Frontend
@@ -25,4 +27,7 @@ build/
 
 backend/__pycache__/process_frames.cpython-312.pyc
 backend/__pycache__/video_utils.cpython-312.pyc
+
+Backend/.coverage
+
 

@@ -1,0 +1,30 @@
+WEEK THREE 
+participation problems 
+~PA 7.5 #38... 
+
+The balance on a 6-year loan is $6,838. 
+If the simple interest rate is 5.25% per year, 
+what was the principal borrowed? 
+
+B: balance ~ 6838 
+r: interest ~ 5.25 
+P: principal ~ ? 
+t: time ~ 6 
+
+I = Prt 
+= P(1+(5.25)(6)) 
+= P(1+31.5) 
+THIS IS THE INTEREST OVER 6 YEARS w/ 5.25% RATE. 
+
+So... interest + principal = 6838 
+6627.6 + 210.4 = 6838 
+
+6838 = P(1+(5.25)(6)) 
+= P(1+31.5) 
+= P(32.5) 
+
+6838 = 32.5P 
+32.5 = 32.5 
+210.4 = P 
+
+The principal that was borrowed is $210.40.
