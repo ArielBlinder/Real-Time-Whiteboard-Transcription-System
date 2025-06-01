@@ -5,7 +5,8 @@ import time
 from typing import List
 
 # IMPORTANT: Replace with your API key, Get it from https://openrouter.ai/settings/keys
-OPENROUTER_API_KEY = "ADD_KEY_HERE" 
+#OPENROUTER_API_KEY = "ADD_KEY_HERE" 
+OPENROUTER_API_KEY = "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"
 
 def process_frames_with_gemini(frame_texts: List[str]) -> str:
     """
