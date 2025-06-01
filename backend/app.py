@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from process_frames import transcribe_image
-from process_video_text import process_frames_with_gemini
+from process_frames import transcribe_image, NVIDIA_API_KEY as NVIDIA_API_KEY
+from process_video_text import process_frames_with_gemini, OPENROUTER_API_KEY
 from video_utils import extract_frames_to_memory, tmp_dir
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -10,6 +10,26 @@ import os
 
 app = Flask(__name__)
 CORS(app)
+
+def check_api_keys() -> tuple[bool, str]:
+    """
+    Check if required API keys are set.
+    
+    Returns:
+        tuple: (are_keys_valid, error_message)
+    """
+    errors = []
+    
+    if NVIDIA_API_KEY == "ADD_KEY_HERE":
+        errors.append("NVIDIA API key not set.\nPlease add your API key in process_frames.py file.\nGet your API key from https://build.nvidia.com/settings/api-keys")
+    
+    if OPENROUTER_API_KEY == "ADD_KEY_HERE":
+        errors.append("OpenRouter API key not set.\nPlease add your API key in process_video_text.py file.\nGet your API key from https://openrouter.ai/settings/keys")
+    
+    if errors:
+        return False, "\n\n".join(errors)
+    
+    return True, ""
 
 def get_optimal_workers() -> int:
     """
@@ -123,6 +143,11 @@ def upload_file():
         JSON response containing transcribed text or error message
     """
     try:
+        # Check API keys before any processing
+        keys_valid, error_message = check_api_keys()
+        if not keys_valid:
+            return jsonify({'error': error_message}), 400
+
         if 'file' not in request.files:
             return jsonify({'error': 'No file uploaded'}), 400
 
