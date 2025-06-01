@@ -20,6 +20,7 @@
 - **Export Options:** Download transcriptions as `.docx`, `.pdf`, or `.txt`.
 - **User-Friendly Interface:** Responsive UI for easy interaction and review.
 - **Editing and Collaboration:** Edit transcriptions and add comments before export.
+- **Comprehensive Testing:** 36 automated tests with 85% code coverage ensuring reliability.
 
 ---
 
@@ -34,6 +35,7 @@
 
 ```
 /Backend        # Python Flask server, OCR, AI/LLM integration
+  /tests        # Comprehensive test suite (36 tests)
 /Frontend       # React.js web application
 /Docs           # Additional documentation and design docs
 /requirements.txt # Python dependencies for backend
@@ -144,13 +146,60 @@ yarn install
 
 ## Testing & Development
 
-- **Integration Test:**
-  - Run `Backend/test_integration.py` to verify API and AI integration.
-  - Ensure API keys are set before running tests.
-- **Frontend:**
-  - Use `npm run dev` for hot-reload development.
-- **Backend:**
-  - Use `python app.py` for local development (auto-reloads with `debug=True`).
+The project includes a comprehensive test suite with 36 tests covering all aspects of the system:
+
+### **Test Suite Overview**
+
+- **Total Tests:** 36 (25 unit + 8 integration + 3 performance)
+- **Code Coverage:** ~85%
+- **Test Categories:**
+  - **Unit Tests:** Fast, mocked dependencies (API key validation, image processing, NVIDIA OCR, Gemini processing, Flask routes)
+  - **Integration Tests:** Real API calls (NVIDIA OCR, Gemini, end-to-end pipeline)
+  - **Performance Tests:** Benchmarking and scaling validation
+
+### **Running Tests**
+
+```bash
+# Navigate to Backend directory
+cd Backend
+
+# Install test dependencies
+pip install -r tests/test_requirements.txt
+
+# Run different test categories
+python tests/run_tests.py unit              # Fast unit tests (recommended)
+python tests/run_tests.py integration       # Integration tests (requires API keys)
+python tests/run_tests.py performance       # Performance tests
+python tests/run_tests.py all               # All tests
+python tests/run_tests.py unit --coverage   # With coverage report
+
+# Manual pytest commands
+python -m pytest tests/test_boardcast.py -v                                      # All tests
+python -m pytest tests/test_boardcast.py -v -m "not integration and not performance"  # Unit only
+```
+
+### **Test Results Example**
+
+```bash
+================================== 25 passed, 11 deselected in 0.62s ==================================
+✅ Unit Tests: 25/25 PASSED
+✅ NVIDIA OCR Integration: 3/3 PASSED
+✅ Performance Tests: 3/3 PASSED
+📊 Coverage: 85% overall
+```
+
+### **For Contributors**
+
+- **Run unit tests** before committing: `python tests/run_tests.py unit`
+- **Run integration tests** before releases (requires valid API keys)
+- **Check coverage**: `python tests/run_tests.py unit --coverage`
+- **Test documentation**: See `Backend/tests/README.md` for detailed guide
+
+### **Legacy Testing**
+
+- **Basic Integration Test:** `Backend/test_integration.py` (deprecated - use new test suite)
+- **Frontend Testing:** Use `npm run dev` for hot-reload development
+- **Backend Development:** Use `python app.py` for local development
 
 ---
 
@@ -158,8 +207,16 @@ yarn install
 
 1. Fork the repository and create a new branch for your feature or bugfix.
 2. Write clear, well-documented code and update/add tests as needed.
-3. Ensure your code passes all tests and does not break existing functionality.
-4. Submit a pull request with a clear description of your changes.
+3. **Run the test suite** and ensure all tests pass: `python tests/run_tests.py unit`
+4. Ensure your code passes all tests and does not break existing functionality.
+5. Submit a pull request with a clear description of your changes.
+
+### **Testing Requirements for Contributors**
+
+- All new features must include unit tests
+- API integrations require both unit (mocked) and integration (real API) tests
+- Performance-critical code should include performance tests
+- Maintain or improve code coverage (currently 85%)
 
 ---
 
@@ -180,6 +237,7 @@ This project is licensed under the MIT License. See [LICENSE](./LICENSE) for det
 
 - **FFMPEG not found:** Ensure `ffmpeg` and `ffprobe` are installed and in your system PATH.
 - **API errors:** Double-check your API keys and network connection.
+- **Test failures:** Run `python tests/run_tests.py unit` to validate system functionality.
 - **Windows users:** Use `start_app.bat` for easiest startup.
 - **Other issues:** Please open an issue or check the [Docs](./Docs) folder for more details.
 
@@ -188,5 +246,6 @@ This project is licensed under the MIT License. See [LICENSE](./LICENSE) for det
 ## Related & Further Reading
 
 - See `/Docs` for detailed design, requirements, and competitor analysis.
+- See `Backend/tests/README.md` for comprehensive testing documentation.
 - For FFMPEG help: [FFMPEG Documentation](https://ffmpeg.org/documentation.html)
 - For Nvidia NIM and OpenRouter API docs, see their respective official sites.
