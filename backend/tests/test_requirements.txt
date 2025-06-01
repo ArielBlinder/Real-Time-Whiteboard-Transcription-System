@@ -1,30 +1,5 @@
-# Testing requirements for Real-Time Whiteboard Transcription System
-
-# Core testing framework
-unittest2>=1.1.0  # Enhanced unittest for Python (if using older Python versions)
-
-# Mocking and testing utilities
 pytest>=7.0.0
-pytest-cov>=4.0.0
 pytest-mock>=3.10.0
-coverage>=7.0.0
-
-# For HTTP mocking and API testing
-responses>=0.23.0
-requests-mock>=1.10.0
-
-# For image testing
+requests-mock>=1.9.0
 Pillow>=9.0.0
-
-# Main application dependencies (for testing)
-Flask>=2.0.0
-Flask-CORS>=4.0.0
-requests>=2.28.0
-
-# For async/parallel testing
-pytest-asyncio>=0.21.0
-pytest-xdist>=3.0.0  # For parallel test execution
-
-# Test reporting and formatting
-pytest-html>=3.1.0
-pytest-json-report>=1.5.0 
+flask>=2.0.0 
