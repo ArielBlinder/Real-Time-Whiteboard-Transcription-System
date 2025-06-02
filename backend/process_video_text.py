@@ -8,15 +8,12 @@ from typing import List
 OPENROUTER_API_KEY = "ADD_KEY_HERE" 
 
 def process_frames_with_gemini(frame_texts: List[str]) -> str:
-    """
-    Process a list of OCR texts from video frames using Gemini API.
+    # Process a list of OCR texts from video frames using Gemini API
     
-    Args:
-        frame_texts: List of OCR text results from individual frames (already ordered chronologically)
+    # Args: "frame_texts": List of OCR text results from individual frames that are ordered chronologically
         
-    Returns:
-        str: Processed and cleaned transcription from Gemini
-    """
+    # Returns: Processed and cleaned transcription from Gemini giving the final result
+    
     if not OPENROUTER_API_KEY:
         raise ValueError("OPENROUTER_API_KEY environment variable is not set")
     
@@ -87,14 +84,19 @@ def process_frames_with_gemini(frame_texts: List[str]) -> str:
     }
 
     try:
+
+        # Make the API request with exponential backoff retry logic
+        # OpenRouter API endpoint is unstable sometimes so we need to retry
         response = make_api_request_with_retry(
             url="https://openrouter.ai/api/v1/chat/completions",
             headers=headers,
             data=data
         )
 
+        # Get the response data
         response_data = response.json()
         
+        # Check if the response contains a valid message
         if response_data.get("choices") and response_data["choices"][0].get("message"):
             result = response_data["choices"][0]["message"].get("content", "No content found in response.")
             return result
@@ -109,23 +111,24 @@ def process_frames_with_gemini(frame_texts: List[str]) -> str:
         return f"An unexpected error occurred: {str(e)}"
 
 def make_api_request_with_retry(url: str, headers: dict, data: dict, max_retries: int = 3, initial_delay: float = 1.0) -> requests.Response:
-    """
-    Make an API request with exponential backoff retry logic for rate limiting.
     
-    Args:
-        url: The API endpoint URL
-        headers: Request headers
-        data: Request data
-        max_retries: Maximum number of retry attempts
-        initial_delay: Initial delay in seconds before first retry
+    # Make an API request with exponential backoff retry logic for rate limiting. 
+    # OpenRouter API endpoint is unstable sometimes so we need to retry
+    
+    # Args:
+    #     url: The API endpoint URL
+    #     headers: Request headers
+    #     data: Request data
+    #     max_retries: Maximum number of retry attempts
+    #     initial_delay: Initial delay in seconds before first retry
         
-    Returns:
-        requests.Response: The API response
-    """
+    # Returns: requests.Response: The API response
+
     delay = initial_delay
     
     for attempt in range(max_retries):
         try:
+            # Send the request to the API
             response = requests.post(
                 url=url,
                 headers=headers,
@@ -139,8 +142,10 @@ def make_api_request_with_retry(url: str, headers: dict, data: dict, max_retries
                     time.sleep(delay)
                     delay *= 2  # Exponential backoff
                     continue
-                    
+            # Raise an error if the response is not successful
             response.raise_for_status()
+            
+            # Return the response
             return response
             
         except requests.exceptions.RequestException as e:

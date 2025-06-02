@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""
-Test Runner Script for Real-Time Whiteboard Transcription System
 
-This script provides convenient commands to run different categories of tests.
-"""
+# Test Runner Script for Real-Time Whiteboard Transcription System
+
+# This script provides convenient commands to run different categories of tests.
 
 import subprocess
 import sys
@@ -11,8 +10,8 @@ import argparse
 from pathlib import Path
 
 def run_command(cmd, description):
-    """Run a command and display results"""
-    print(f"\n🚀 {description}")
+    # Run a command and display results
+    print(f"\n {description}")
     print("=" * 60)
     
     try:
@@ -23,17 +22,22 @@ def run_command(cmd, description):
         return False
 
 def main():
+    # Parse command line arguments
     parser = argparse.ArgumentParser(description="Run tests for the whiteboard transcription system")
     parser.add_argument(
         "category",
         choices=["unit", "integration", "performance", "all", "quick"],
         help="Test category to run"
     )
+    
+    # Generate coverage report
     parser.add_argument(
         "--coverage",
         action="store_true",
         help="Generate coverage report"
     )
+    
+    # Run with verbose output
     parser.add_argument(
         "--verbose",
         action="store_true",
@@ -55,6 +59,7 @@ def main():
     if args.coverage:
         base_cmd += " --cov=. --cov-report=html --cov-report=term-missing"
 
+    # Define commands for different categories
     commands = {
         "unit": (
             f'{base_cmd} -m "not integration and not performance"',
@@ -88,12 +93,12 @@ def main():
         sys.exit(1)
 
     # Print helpful information
-    print(f"\n💡 Test Categories Available:")
-    print(f"   • unit: Fast unit tests with mocked dependencies")
-    print(f"   • integration: End-to-end tests with real API calls")
-    print(f"   • performance: Performance benchmarking tests")
-    print(f"   • all: Run everything")
-    print(f"   • quick: Fast unit tests, stop on first failure")
+    print(f"\n Test Categories Available:")
+    print(f"unit: Fast unit tests with mocked dependencies")
+    print(f"integration: End-to-end tests with real API calls")
+    print(f"performance: Performance benchmarking tests")
+    print(f"all: Run everything")
+    print(f"quick: Fast unit tests, stop on first failure")
     
     if args.coverage:
         print(f"\n📊 Coverage report generated in htmlcov/index.html")
