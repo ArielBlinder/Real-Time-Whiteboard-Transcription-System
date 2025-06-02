@@ -26,13 +26,13 @@ from video_utils import check_dependencies, extract_frames_to_memory, Dependency
 # ===============================
 
 class TestAPIKeyValidation:
-    """Test API key validation functionality"""
+    # Test API key validation functionality
     
     # Test 1: Valid API keys
     @patch('app.NVIDIA_API_KEY', 'valid_nvidia_key')
     @patch('app.OPENROUTER_API_KEY', 'valid_openrouter_key')
     def test_check_api_keys_valid(self):
-        """Test that valid API keys pass validation"""
+        # Test that valid API keys pass validation
         is_valid, error_msg = check_api_keys()
         assert is_valid is True
         assert error_msg == ""
@@ -41,7 +41,7 @@ class TestAPIKeyValidation:
     @patch('app.NVIDIA_API_KEY', 'ADD_KEY_HERE')
     @patch('app.OPENROUTER_API_KEY', 'ADD_KEY_HERE')
     def test_check_api_keys_invalid(self):
-        """Test that placeholder API keys fail validation with appropriate error messages"""
+        # Test that placeholder API keys fail validation with appropriate error messages
         is_valid, error_msg = check_api_keys()
         assert is_valid is False
         assert "NVIDIA API key not set" in error_msg
@@ -50,12 +50,12 @@ class TestAPIKeyValidation:
 
 
 class TestWorkerOptimization:
-    """Test worker count optimization logic"""
+    # Test worker count optimization logic
     
     # Test 3: Low-end system optimization
     @patch('os.cpu_count', return_value=2)
     def test_get_optimal_workers_low_end(self, mock_cpu_count):
-        """Test worker optimization for low-end systems (2 cores)"""
+        # Test worker optimization for low-end systems - 2 cores
         workers = get_optimal_workers()
         assert workers == 4  # min(4, 2*2)
         assert workers >= 2  # Minimum threshold
@@ -63,18 +63,18 @@ class TestWorkerOptimization:
     # Test 4: High-end system optimization
     @patch('os.cpu_count', return_value=16)
     def test_get_optimal_workers_high_end(self, mock_cpu_count):
-        """Test worker optimization for high-end systems (16 cores)"""
+        # Test worker optimization for high-end systems - 16 cores
         workers = get_optimal_workers()
         assert workers == 20  # min(20, 16*1.5) = min(20, 24) = 20
         assert workers >= 2
 
 
 class TestImageProcessing:
-    """Test image preparation and processing functionality"""
+    # Test image preparation and processing functionality
     
     # Test 5: Valid image preparation
     def test_prepare_image_valid_pil_image(self):
-        """Test successful image preparation with PIL Image object"""
+        # Test successful image preparation with PIL Image object
         # Create a test image
         test_image = Image.new('RGB', (100, 100), color='red')
         success, result = prepare_image(test_image)
@@ -85,14 +85,14 @@ class TestImageProcessing:
     
     # Test 6: Invalid image input
     def test_prepare_image_invalid_input(self):
-        """Test image preparation with invalid input"""
+        # Test image preparation with invalid input
         success, result = prepare_image("nonexistent_file.jpg")
         assert success is False
         assert "Failed to process image" in result
     
     # Test 7: Large image handling
     def test_prepare_image_large_image(self):
-        """Test image preparation correctly resizes large images"""
+        # Test image preparation correctly resizes large images
         # Create a large test image
         large_image = Image.new('RGB', (2000, 2000), color='blue')
         success, result = prepare_image(large_image)
@@ -103,13 +103,13 @@ class TestImageProcessing:
 
 
 class TestNVIDIAOCRUnit:
-    """Test NVIDIA OCR functionality with mocked API calls"""
+    # Test NVIDIA OCR functionality with mocked API calls
     
     # Test 8: Successful NVIDIA OCR transcription (mocked)
     @patch('requests.post')
     @patch('process_frames.NVIDIA_API_KEY', 'valid_nvidia_key')
     def test_nvidia_transcribe_image_success(self, mock_post):
-        """Test successful image transcription with mocked NVIDIA API response"""
+        # Test successful image transcription with mocked NVIDIA API response
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.raise_for_status.return_value = None
@@ -146,7 +146,7 @@ class TestNVIDIAOCRUnit:
     @patch('requests.post')
     @patch('process_frames.NVIDIA_API_KEY', 'valid_nvidia_key')
     def test_nvidia_transcribe_image_invalid_response(self, mock_post):
-        """Test NVIDIA OCR handling of invalid API response"""
+        # Test NVIDIA OCR handling of invalid API response
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.raise_for_status.return_value = None
@@ -161,7 +161,7 @@ class TestNVIDIAOCRUnit:
     # Test 11: NVIDIA API with no API key
     @patch('process_frames.NVIDIA_API_KEY', 'ADD_KEY_HERE')
     def test_nvidia_transcribe_image_no_api_key(self):
-        """Test NVIDIA OCR behavior when API key is not set"""
+        # Test NVIDIA OCR behavior when API key is not set
         test_image = Image.new('RGB', (100, 100), color='white')
         # The function should still attempt the request but will likely fail
         result = transcribe_image(test_image)
@@ -172,7 +172,7 @@ class TestNVIDIAOCRUnit:
     @patch('requests.post')
     @patch('process_frames.NVIDIA_API_KEY', 'valid_nvidia_key')
     def test_nvidia_transcribe_image_json_error(self, mock_post):
-        """Test NVIDIA OCR handling of malformed JSON response"""
+        # Test NVIDIA OCR handling of malformed JSON response
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.raise_for_status.return_value = None
@@ -186,12 +186,12 @@ class TestNVIDIAOCRUnit:
 
 
 class TestFrameProcessing:
-    """Test frame processing and transcription functionality"""
+    # Test frame processing and transcription functionality
     
     # Test 13: Single frame processing with order
     @patch('app.transcribe_image')
     def test_process_frame_with_order(self, mock_transcribe):
-        """Test processing a single frame while maintaining order"""
+        # Test processing a single frame while maintaining order
         mock_transcribe.return_value = "Test transcription"
         test_image = Image.new('RGB', (100, 100))
         frame_data = (5, test_image)
@@ -205,7 +205,7 @@ class TestFrameProcessing:
     # Test 14: Parallel frame processing
     @patch('app.transcribe_image')
     def test_process_video_frames_parallel_success(self, mock_transcribe):
-        """Test successful parallel processing of multiple frames"""
+        # Test successful parallel processing of multiple frames
         mock_transcribe.side_effect = ["Text 1", "Text 2", "Text 3"]
         
         frames = [
@@ -223,13 +223,13 @@ class TestFrameProcessing:
 
 
 class TestVideoProcessing:
-    """Test video-related processing functionality"""
+    # Test video-related processing functionality
     
     # Test 15: Gemini processing with valid frames
     @patch('process_video_text.make_api_request_with_retry')
     @patch('process_video_text.OPENROUTER_API_KEY', 'valid_key')
     def test_process_frames_with_gemini_success(self, mock_api_request):
-        """Test successful processing of frame texts with Gemini API"""
+        # Test successful processing of frame texts with Gemini API
         mock_response = Mock()
         mock_response.json.return_value = {
             "choices": [{"message": {"content": "Processed lecture content"}}]
@@ -245,7 +245,7 @@ class TestVideoProcessing:
     # Test 16: Gemini processing with no API key
     @patch('process_video_text.OPENROUTER_API_KEY', '')
     def test_process_frames_with_gemini_no_api_key(self):
-        """Test Gemini processing fails gracefully without API key"""
+        # Test Gemini processing fails gracefully without API key
         frame_texts = ["Some text"]
         
         with pytest.raises(ValueError, match="OPENROUTER_API_KEY environment variable is not set"):
@@ -254,24 +254,24 @@ class TestVideoProcessing:
     # Test 17: Empty frame texts handling
     @patch('process_video_text.OPENROUTER_API_KEY', 'valid_key')
     def test_process_frames_with_gemini_empty_frames(self):
-        """Test handling of empty frame texts"""
+        # Test handling of empty frame texts
         result = process_frames_with_gemini([])
         assert result == "No frame texts provided for processing"
 
 
 class TestFlaskRoutes:
-    """Test Flask application routes and endpoints"""
+    # Test Flask application routes and endpoints
     
     @pytest.fixture
     def client(self):
-        """Create test client for Flask app"""
+        # Create test client for Flask app
         app.config['TESTING'] = True
         with app.test_client() as client:
             yield client
     
     # Test 18: Health check endpoint
     def test_health_check_endpoint(self, client):
-        """Test the health check endpoint returns correct status"""
+        # Test the health check endpoint returns correct status
         response = client.get('/health')
         assert response.status_code == 200
         data = json.loads(response.data)
@@ -281,7 +281,7 @@ class TestFlaskRoutes:
     # Test 19: System info endpoint
     @patch('app.os.cpu_count', return_value=8)
     def test_system_info_endpoint(self, mock_cpu_count, client):
-        """Test system info endpoint returns optimization details"""
+        # Test system info endpoint returns optimization details
         response = client.get('/system-info')
         assert response.status_code == 200
         data = json.loads(response.data)
@@ -292,7 +292,7 @@ class TestFlaskRoutes:
     # Test 20: Upload endpoint with missing file
     @patch('app.check_api_keys', return_value=(True, ''))
     def test_upload_endpoint_no_file(self, mock_keys, client):
-        """Test upload endpoint handles missing file gracefully"""
+        # Test upload endpoint handles missing file gracefully
         response = client.post('/upload')
         assert response.status_code == 400
         data = json.loads(response.data)
@@ -301,7 +301,7 @@ class TestFlaskRoutes:
     # Test 21: Upload endpoint with invalid API keys
     @patch('app.check_api_keys', return_value=(False, 'API keys not set'))
     def test_upload_endpoint_invalid_keys(self, mock_keys, client):
-        """Test upload endpoint rejects requests with invalid API keys"""
+        # Test upload endpoint rejects requests with invalid API keys
         # Create a dummy file
         data = {'file': (io.BytesIO(b'dummy content'), 'test.jpg')}
         response = client.post('/upload', data=data)
@@ -311,12 +311,12 @@ class TestFlaskRoutes:
 
 
 class TestDependencyManagement:
-    """Test system dependency checking"""
+    # Test system dependency checking
     
     # Test 22: Valid dependencies
     @patch('subprocess.run')
     def test_check_dependencies_valid(self, mock_subprocess):
-        """Test successful dependency check when FFmpeg is available"""
+        # Test successful dependency check when FFmpeg is available
         mock_subprocess.return_value = None  # Successful run
         # Should not raise exception
         check_dependencies()
@@ -331,18 +331,18 @@ class TestDependencyManagement:
     # Test 23: Missing dependencies
     @patch('subprocess.run', side_effect=FileNotFoundError())
     def test_check_dependencies_missing(self, mock_subprocess):
-        """Test dependency check fails when FFmpeg is missing"""
+        # Test dependency check fails when FFmpeg is missing
         with pytest.raises(DependencyError, match="Missing system packages"):
             check_dependencies()
 
 
 class TestAPIRetryLogic:
-    """Test API request retry mechanisms"""
+    # Test API request retry mechanisms
     
     # Test 24: Successful API request without retry
     @patch('requests.post')
     def test_make_api_request_success(self, mock_post):
-        """Test successful API request on first attempt"""
+        # Test successful API request on first attempt
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.raise_for_status.return_value = None
@@ -360,7 +360,7 @@ class TestAPIRetryLogic:
     @patch('requests.post')
     @patch('time.sleep')
     def test_make_api_request_rate_limit_retry(self, mock_sleep, mock_post):
-        """Test API request retry logic handles rate limiting (429 status)"""
+        # Test API request retry logic handles rate limiting (429 status)
         # First call returns 429, second call succeeds
         mock_response_429 = Mock()
         mock_response_429.status_code = 429
@@ -388,16 +388,16 @@ class TestAPIRetryLogic:
 
 @pytest.mark.integration
 class TestNVIDIAOCRIntegration:
-    """Integration tests for NVIDIA OCR with real API calls"""
+    # Integration tests for NVIDIA OCR with real API calls
     
     def setup_method(self):
-        """Check if NVIDIA integration tests can run"""
+        # Check if NVIDIA integration tests can run
         if not NVIDIA_API_KEY or NVIDIA_API_KEY == "ADD_KEY_HERE":
             pytest.skip("NVIDIA integration tests require a valid NVIDIA_API_KEY")
     
     # Test 26: Real NVIDIA OCR API integration
     def test_nvidia_real_api_integration(self):
-        """Test NVIDIA OCR integration with a real API call"""
+        # Test NVIDIA OCR integration with a real API call
         # Create a simple test image with text
         test_image = Image.new('RGB', (200, 100), color='white')
         # Note: In real scenarios, you'd have actual handwritten text
@@ -414,7 +414,7 @@ class TestNVIDIAOCRIntegration:
     
     # Test 27: NVIDIA OCR with complex image
     def test_nvidia_real_api_complex_image(self):
-        """Test NVIDIA OCR with a more complex image structure"""
+        # Test NVIDIA OCR with a more complex image structure
         # Create an image with some basic shapes (simulating content)
         test_image = Image.new('RGB', (400, 300), color='white')
         
@@ -427,7 +427,7 @@ class TestNVIDIAOCRIntegration:
     
     # Test 28: NVIDIA OCR error handling with real API
     def test_nvidia_real_api_oversized_image(self):
-        """Test NVIDIA OCR behavior with oversized images using real API"""
+        # Test NVIDIA OCR behavior with oversized images using real API
         # Create a very large image that should be resized
         large_image = Image.new('RGB', (3000, 3000), color='white')
         
@@ -441,16 +441,16 @@ class TestNVIDIAOCRIntegration:
 
 @pytest.mark.integration  
 class TestGeminiIntegration:
-    """Integration tests for Gemini API with real API calls"""
+    # Integration tests for Gemini API with real API calls
     
     def setup_method(self):
-        """Check if Gemini integration tests can run"""
+        # Check if Gemini integration tests can run
         if not OPENROUTER_API_KEY or OPENROUTER_API_KEY == "ADD_KEY_HERE":
             pytest.skip("Gemini integration tests require a valid OPENROUTER_API_KEY")
     
     # Test 29: Real Gemini API integration
     def test_gemini_integration_real_api(self):
-        """Test the Gemini integration with sample OCR data using real API"""
+        # Test the Gemini integration with sample OCR data using real API
         # Sample OCR texts from multiple frames (simulating video transcription)
         sample_frame_texts = [
             "Mathematical Analysis\nChapter 3: Derivatives",
@@ -472,19 +472,19 @@ class TestGeminiIntegration:
     
     # Test 30: Empty input handling with real API
     def test_empty_input_real_api(self):
-        """Test handling of empty input with real API"""
+        # Test handling of empty input with real API
         result = process_frames_with_gemini([])
         assert result == "No frame texts provided for processing"
     
     # Test 31: Invalid input handling with real API
     def test_invalid_input_real_api(self):
-        """Test handling of invalid input with real API"""
+        # Test handling of invalid input with real API
         result = process_frames_with_gemini(["", "   ", "\n\n"])
         assert result == "No valid text content found in frames"
     
     # Test 32: Single frame processing with real API
     def test_single_frame_real_api(self):
-        """Test processing a single frame with real API"""
+        # Test processing a single frame with real API
         frame_texts = ["Simple math equation: 2 + 2 = 4"]
         result = process_frames_with_gemini(frame_texts)
         
@@ -495,10 +495,10 @@ class TestGeminiIntegration:
 
 @pytest.mark.integration
 class TestEndToEndIntegration:
-    """End-to-end integration tests combining NVIDIA OCR and Gemini processing"""
+    # End-to-end integration tests combining NVIDIA OCR and Gemini processing
     
     def setup_method(self):
-        """Check if end-to-end integration tests can run"""
+        # Check if end-to-end integration tests can run
         if not NVIDIA_API_KEY or NVIDIA_API_KEY == "ADD_KEY_HERE":
             pytest.skip("End-to-end tests require a valid NVIDIA_API_KEY")
         if not OPENROUTER_API_KEY or OPENROUTER_API_KEY == "ADD_KEY_HERE":
@@ -506,7 +506,7 @@ class TestEndToEndIntegration:
     
     # Test 33: Full pipeline test (NVIDIA OCR + Gemini processing)
     def test_full_pipeline_real_apis(self):
-        """Test the complete pipeline: NVIDIA OCR -> Gemini processing"""
+        # Test the complete pipeline: NVIDIA OCR -> Gemini processing
         # Create test images
         test_images = [
             Image.new('RGB', (200, 100), color='white'),
@@ -539,12 +539,12 @@ class TestEndToEndIntegration:
 
 @pytest.mark.performance
 class TestPerformance:
-    """Performance-related tests"""
+    # Performance-related tests
     
     # Test 34: Large frame processing performance
     @patch('app.transcribe_image')
     def test_large_frame_processing_performance(self, mock_transcribe):
-        """Test performance with large number of frames"""
+        # Test performance with large number of frames
         import time
         
         mock_transcribe.return_value = "Test text"
@@ -563,7 +563,7 @@ class TestPerformance:
     # Test 35: Worker scaling efficiency
     @patch('app.transcribe_image')
     def test_worker_scaling_efficiency(self, mock_transcribe):
-        """Test that more workers improve performance for parallel processing"""
+        # Test that more workers improve performance for parallel processing
         import time
         
         # Add a small delay to simulate actual work
@@ -603,7 +603,7 @@ class TestPerformance:
     # Test 36: NVIDIA API performance test
     @pytest.mark.integration
     def test_nvidia_api_performance(self):
-        """Test NVIDIA API response time performance"""
+        # Test NVIDIA API response time performance
         if not NVIDIA_API_KEY or NVIDIA_API_KEY == "ADD_KEY_HERE":
             pytest.skip("Performance test requires a valid NVIDIA_API_KEY")
         
