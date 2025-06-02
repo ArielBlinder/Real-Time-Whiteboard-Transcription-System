@@ -6,43 +6,43 @@ from PIL import Image
 import io
 from typing import List, Tuple
 
-FFMPEG  = "ffmpeg"
+FFMPEG  = "ffmpeg" 
 FFPROBE = "ffprobe"
 EXTRACT_EVERY_SEC = 30     # Frame interval (seconds)
-FRAME_SIZE = 800    # Output image size
+FRAME_SIZE = 800    # Output image size is 800x800 
 
 class DependencyError(RuntimeError):
     pass
 
+# Check if the command is available
 def _cmd_ok(cmd):
     try:
+        # Run the command and check if it returns a successful exit code
         subprocess.run([cmd, "-version"], capture_output=True, check=True)
         return True
     except (subprocess.CalledProcessError, FileNotFoundError):
         return False
 
+# Check if the dependencies are installed
 def check_dependencies():
+    # Check if the commands are available
     missing = [c for c in (FFMPEG, FFPROBE) if not _cmd_ok(c)]
     if missing:
         raise DependencyError(f"Missing system packages: {', '.join(missing)}")
 
 def extract_frames_to_memory(video_path: Path) -> List[Tuple[int, Image.Image]]:
-    """
-    Extract frames from video directly to memory for immediate processing.
     
-    Args:
-        video_path: Path to the video file
-        
-    Returns:
-        List of tuples containing (frame_number, PIL.Image) ordered chronologically
-    """
+    # Extract frames from video directly to memory for immediate processing. 
+    # Args: video_path: Path to the video file
+    # Returns: List of tuples containing (frame_number, Image) ordered chronologically
+    
     check_dependencies()
     
     # Create a temporary directory for frame extraction
     with tempfile.TemporaryDirectory(prefix="frames_") as temp_dir:
         temp_path = Path(temp_dir)
+        # Create a pattern for the frame files
         frame_pattern = temp_path / "frame_%05d.jpg"
-        
         # Extract frames to temporary files first (more reliable than parsing pipe)
         cmd = [
             FFMPEG,
@@ -50,15 +50,21 @@ def extract_frames_to_memory(video_path: Path) -> List[Tuple[int, Image.Image]]:
             "-loglevel", "error",
             "-i", str(video_path),
             "-vf", (
+                # One frame per every 30 seconds
                 f"fps=1/{EXTRACT_EVERY_SEC},"
+                # Scale the frame to 800x800
                 f"scale={FRAME_SIZE}:{FRAME_SIZE}:force_original_aspect_ratio=decrease,"
+                # Pad the frame to 800x800
                 f"pad={FRAME_SIZE}:{FRAME_SIZE}:(ow-iw)/2:(oh-ih)/2"
             ),
+            # Quality is 2
             "-q:v", "2",
+            # Output the frame files
             str(frame_pattern)
         ]
         
         try:
+            # Run the command and check if it returns a successful exit code
             subprocess.run(cmd, check=True, capture_output=True)
             
             # Load all frame files into memory
@@ -84,14 +90,25 @@ def extract_frames_to_memory(video_path: Path) -> List[Tuple[int, Image.Image]]:
         except subprocess.CalledProcessError as e:
             raise RuntimeError(f"FFmpeg failed: {e}")
 
+def tmp_dir() -> tempfile.TemporaryDirectory:
+    return tempfile.TemporaryDirectory(prefix="video_proc_")
+
+# Legacy function for backward compatibility.
+"""
 def extract_frames(video_path: Path, dst_folder: Path) -> list[Path]:
-    """
-    Legacy function for backward compatibility.
-    Extract frames to files (kept for compatibility but not recommended for performance).
-    """
+    
+    # Legacy function for backward compatibility.
+    # Extract frames to files 
+    
     check_dependencies()
+    
+    # Create the destination folder
     dst_folder.mkdir(parents=True, exist_ok=True)
+    
+    # Create a pattern for the frame files
     frame_pattern = dst_folder / "frame_%05d.jpg"
+    
+    # Run the command and check if it returns a successful exit code
     subprocess.run(
         [
             FFMPEG,
@@ -109,6 +126,4 @@ def extract_frames(video_path: Path, dst_folder: Path) -> list[Path]:
         check=True
     )
     return sorted(dst_folder.glob("frame_*.jpg"))
-
-def tmp_dir() -> tempfile.TemporaryDirectory:
-    return tempfile.TemporaryDirectory(prefix="video_proc_")
+"""
