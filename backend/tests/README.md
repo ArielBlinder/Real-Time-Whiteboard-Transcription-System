@@ -2,7 +2,7 @@
 
 This directory contains a comprehensive test suite for the Real-Time Whiteboard Transcription System. The tests are organized into multiple categories to ensure complete coverage of all application functionality.
 
-## 📁 Test Structure
+##  Test Structure
 
 ```
 tests/

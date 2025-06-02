@@ -5,7 +5,7 @@ This package contains a complete test suite for the whiteboard transcription sys
 with 36 tests covering all aspects of the application including NVIDIA OCR integration,
 Gemini processing, Flask routes, error handling, and performance validation.
 
-🧪 Test Categories:
+ Test Categories:
 - Unit Tests (25): Fast, isolated tests with mocked dependencies
   • API key validation and error handling
   • Worker optimization and system scaling  
@@ -28,13 +28,13 @@ Gemini processing, Flask routes, error handling, and performance validation.
   • Worker scaling efficiency
   • NVIDIA API response time measurement
 
-📊 Coverage:
+ Coverage:
 - Total Code Coverage: ~85%
 - NVIDIA OCR Integration: 88% coverage
 - Process Video Text: 76% coverage
 - Main Application: 77% coverage
 
-🚀 Quick Start:
+ Quick Start:
   # Unit tests (fast, no API keys required)
   python tests/run_tests.py unit
   
@@ -44,18 +44,18 @@ Gemini processing, Flask routes, error handling, and performance validation.
   # All tests with coverage
   python tests/run_tests.py unit --coverage
 
-📖 Documentation:
+ Documentation:
   See tests/README.md for comprehensive testing guide
   
-🔧 Manual pytest commands:
+ Manual pytest commands:
   python -m pytest tests/test_boardcast.py -v  # All tests
   python -m pytest tests/test_boardcast.py -v -m "not integration and not performance"  # Unit only
 
-🔑 API Requirements:
+ API Requirements:
   - NVIDIA_API_KEY: For NVIDIA OCR integration tests
   - OPENROUTER_API_KEY: For Gemini API integration tests
   
-⚡ Performance Targets:
+ Performance Targets:
   - Unit tests: <1 second execution
   - Integration tests: <30 seconds (depends on API)
   - Performance tests: <20 seconds
