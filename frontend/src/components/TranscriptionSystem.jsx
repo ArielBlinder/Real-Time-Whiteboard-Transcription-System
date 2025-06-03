@@ -1,9 +1,9 @@
 import react, { useState, useRef } from 'react';
-import FilleInputUI from "./FilleInputUI";
-import FileOutputUI from "./FileOuputUI";
+import FileInputSegment from "./FileInputSegment";
+import FileOuputSegment from "./FileOuputSegment";
 
 
-function UI() {
+function TranscriptionSystem() {
 
     const [inputOption, setInputOption] = useState("image");
     const [file, setFile] = useState("");
@@ -121,8 +121,8 @@ function UI() {
                         <strong>Error:</strong> {error}
                     </div>
                 )}
-                <FilleInputUI inputOption={inputOption} showFile={showFile} handleInputOptionChange={handleInputOptionChange} handleGenerateText={handleGenerateText} onFileChange={handleFile} handleClearMedia={handleClearMedia}></FilleInputUI>
-                <FileOutputUI inputOption={inputOption} file={file} showFile={showFile} generatedText={generatedText} isLoading={isLoading}></FileOutputUI>
+                <FileInputSegment inputOption={inputOption} showFile={showFile} handleInputOptionChange={handleInputOptionChange} handleGenerateText={handleGenerateText} onFileChange={handleFile} handleClearMedia={handleClearMedia}></FileInputSegment>
+                <FileOuputSegment inputOption={inputOption} file={file} showFile={showFile} generatedText={generatedText} isLoading={isLoading}></FileOuputSegment>
             </div>
 
         </>
@@ -133,4 +133,4 @@ function UI() {
 
 }
 
-export default UI
+export default TranscriptionSystem
