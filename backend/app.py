@@ -191,6 +191,8 @@ def upload_file():
 
     except Exception as e:
         return jsonify({'error': f'Processing error: {str(e)}'}), 500
+    
+    
 
 @app.route('/health', methods=['GET'])
 def health_check():

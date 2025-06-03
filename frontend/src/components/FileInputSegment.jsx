@@ -1,7 +1,7 @@
 import react, {useEffect, useState, useRef} from 'react';
 import { FaUpload } from "react-icons/fa"
 
-function FilleInputUI({ inputOption, showFile, handleInputOptionChange, handleGenerateText, onFileChange, handleClearMedia}) {
+function FileInputSegment({ inputOption, showFile, handleInputOptionChange, handleGenerateText, onFileChange, handleClearMedia}) {
 
     const [inputFile, setInputFile] = useState(null);
     const fileInputRef = useRef(null);
@@ -64,4 +64,4 @@ function FilleInputUI({ inputOption, showFile, handleInputOptionChange, handleGe
     );
 }
 
-export default FilleInputUI
+export default FileInputSegment

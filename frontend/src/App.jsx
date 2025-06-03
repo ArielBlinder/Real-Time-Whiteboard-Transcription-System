@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
-import UI from './UI/UI';
+import TranscriptionSystem from './components/TranscriptionSystem';
 import Navbar from './layout/Navbar';
 import About from './pages/About';
 import Footer from "./layout/Footer";
@@ -12,7 +12,7 @@ function App() {
         <Navbar></Navbar>
         <div className="content-container">
         <Routes>
-          <Route path="/" element={<UI />}></Route>
+          <Route path="/" element={<TranscriptionSystem />}></Route>
           <Route path="/about" element={<About />}></Route>
         </Routes>
         </div>
