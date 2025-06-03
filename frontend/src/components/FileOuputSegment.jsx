@@ -1,11 +1,11 @@
-import react, {useState, useEffect} from 'react';
+import react, {useState, useEffect, useMemo } from 'react';
 import Spinner from '../layout/Spinner';
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 import { jsPDF } from "jspdf";
 import { FaPen, FaSave, FaFileAlt, FaFileWord, FaFilePdf } from "react-icons/fa"
 
-function FileOutputUI({ inputOption, file, showFile, generatedText, isLoading}) {
+function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoading}) {
 
     const [text, setText] = useState(generatedText || "");
     const [isEditing, setIsEditing] = useState(false);
@@ -15,6 +15,19 @@ function FileOutputUI({ inputOption, file, showFile, generatedText, isLoading}) 
         setText(generatedText || "");
     }, [generatedText]);
 
+
+    const videoUrl = useMemo(() => {
+        return file ? URL.createObjectURL(file) : null;
+    }, [file]);
+
+    
+    useEffect(() => {
+        return () => {
+            if (videoUrl) {
+                URL.revokeObjectURL(videoUrl);
+            }
+        };
+    }, [videoUrl]);
 
     const handleExportToTxt = () => {
         const doc = new Blob([text], {type: 'text/plain'});
@@ -61,7 +74,7 @@ function FileOutputUI({ inputOption, file, showFile, generatedText, isLoading}) 
         <>
             <div className='output-container'>
                 <div className='media-output-container'>
-                    {file && showFile && inputOption === "video" && (<video controls className='responsive-media' src={URL.createObjectURL(file)} type="video/mp4"></video>)}
+                    {file && showFile && inputOption === "video" && (<video controls className='responsive-media' src={videoUrl} type="video/mp4"></video>)}
                     {file && showFile && inputOption === "image" && (<img className='responsive-media' src={URL.createObjectURL(file)} ></img>)}
                 </div>
                 {file && showFile && (
@@ -74,10 +87,12 @@ function FileOutputUI({ inputOption, file, showFile, generatedText, isLoading}) 
                                 <button className='edit-button' onClick={toggleEdit}>
                                     {isEditing ? <FaSave size={20} /> : <FaPen size={20} />}
                                 </button>
-                                {isEditing ? (
-                                    <textarea className='editable-textarea' value={text} onChange={(e) => setText(e.target.value)} rows={15}></textarea>
-                                ) : (<p id='text'>{text}</p>
-                                )}
+                                <div className="resizable-box">
+                                    {isEditing ? (
+                                        <textarea className='editable-textarea' value={text} onChange={(e) => setText(e.target.value)} rows={15}></textarea>
+                                    ) : (<p id='text' >{text}</p>
+                                    )}
+                                </div>
                             </section>
                         </div>
                         <div className='download-buttons-container'>
@@ -107,4 +122,4 @@ function FileOutputUI({ inputOption, file, showFile, generatedText, isLoading}) 
 
 }
 
-export default FileOutputUI
+export default FileOuputSegment
