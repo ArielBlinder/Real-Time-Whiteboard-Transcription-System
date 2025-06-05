@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import TranscriptionSystem from './components/TranscriptionSystem';
 import Navbar from './layout/Navbar';
 import About from './pages/About';
+import UserMenual from "./pages/UserMenual";
 import Footer from "./layout/Footer";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <div className="content-container">
         <Routes>
           <Route path="/" element={<TranscriptionSystem />}></Route>
+          <Route path="/user-menual" element={<UserMenual />}></Route>
           <Route path="/about" element={<About />}></Route>
         </Routes>
         </div>
