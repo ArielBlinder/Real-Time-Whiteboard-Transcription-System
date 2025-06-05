@@ -1,4 +1,4 @@
-import react, { useState, useEffect, useMemo } from 'react';
+import react, { useState, useEffect, useMemo, useRef } from 'react';
 import Spinner from '../layout/Spinner';
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
@@ -9,11 +9,6 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
 
     const [text, setText] = useState(generatedText || "");
     const [isEditing, setIsEditing] = useState(false);
-
-
-    useEffect(() => {
-        setText(generatedText || "");
-    }, [generatedText]);
 
 
     const videoUrl = useMemo(() => {
@@ -28,6 +23,12 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
             }
         };
     }, [videoUrl]);
+
+
+    useEffect(() => {
+        setText(generatedText || "");
+    }, [generatedText]);
+
 
     // Helper function to remove timestamps from text for export
     const removeTimestamps = (textContent) => {
@@ -79,6 +80,7 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
 
 
 
+
     return (
         <>
             <div className='output-container'>
@@ -99,7 +101,7 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
                                 <div className="resizable-box">
                                     {isEditing ? (
                                         <textarea className='editable-textarea' value={text} onChange={(e) => setText(e.target.value)} rows={15}></textarea>
-                                    ) : (<p id='text' >{text}</p>
+                                    ) : (<p id='text'>{text}</p>
                                     )}
                                 </div>
                             </section>
