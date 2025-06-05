@@ -146,18 +146,18 @@ yarn install
 
 ## Testing & Development
 
-The project includes a comprehensive test suite with 36 tests covering all aspects of the system:
+The project includes a comprehensive test suite with 25 tests covering all aspects of the system:
 
 ### **Test Suite Overview**
 
-- **Total Tests:** 36 (25 unit + 8 integration + 3 performance)
-- **Code Coverage:** ~85%
+- **Total Tests:** 25 (18 unit + 4 integration + 1 performance + 2 edge cases)
 - **Test Categories:**
   - **Unit Tests:** Fast, mocked dependencies (API key validation, image processing, NVIDIA OCR, Gemini processing, Flask routes)
   - **Integration Tests:** Real API calls (NVIDIA OCR, Gemini, end-to-end pipeline)
   - **Performance Tests:** Benchmarking and scaling validation
+  - **Edge Case Tests:** Boundary conditions and error handling
 
-### **Running Tests**
+### **Running Tests (Ultra-Simple)**
 
 ```bash
 # Navigate to Backend directory
@@ -166,48 +166,35 @@ cd Backend
 # Install test dependencies
 pip install -r tests/test_requirements.txt
 
-# Run different test categories
-python tests/run_tests.py unit              # Fast unit tests (recommended)
-python tests/run_tests.py integration       # Integration tests (requires API keys)
-python tests/run_tests.py performance       # Performance tests
-python tests/run_tests.py all               # All tests
-python tests/run_tests.py unit --coverage   # With coverage report
+# Run ALL tests
+python tests/run_tests.py
 
-# Manual pytest commands
-python -m pytest tests/test_boardcast.py -v                                      # All tests
-python -m pytest tests/test_boardcast.py -v -m "not integration and not performance"  # Unit only
-```
 
 ### **Test Results Example**
 
 ```bash
-================================== 25 passed, 11 deselected in 0.62s ==================================
-✅ Unit Tests: 25/25 PASSED
-✅ NVIDIA OCR Integration: 3/3 PASSED
-✅ Performance Tests: 3/3 PASSED
-📊 Coverage: 85% overall
+🧪 Running All Tests in test_boardcast.py
+============================================================
+📊 Total Tests: 25 (18 unit + 4 integration + 1 performance + 2 edge cases)
+
+======================================= 25 passed in 11.41s =======================================
+
+✅ All tests completed successfully!
+
+📈 Test Coverage:
+   • API Integration (NVIDIA OCR + Gemini)
+   • Image & Video Processing
+   • Error Handling & Edge Cases
+   • Performance & Parallel Processing
+   • Flask Routes & Dependencies
 ```
 
-### **For Contributors**
-
-- **Run unit tests** before committing: `python tests/run_tests.py unit`
-- **Run integration tests** before releases (requires valid API keys)
-- **Check coverage**: `python tests/run_tests.py unit --coverage`
-- **Test documentation**: See `Backend/tests/README.md` for detailed guide
-
-### **Legacy Testing**
-
-- **Basic Integration Test:** `Backend/test_integration.py` (deprecated - use new test suite)
-- **Frontend Testing:** Use `npm run dev` for hot-reload development
-- **Backend Development:** Use `python app.py` for local development
-
----
 
 ## Contribution Guidelines
 
 1. Fork the repository and create a new branch for your feature or bugfix.
 2. Write clear, well-documented code and update/add tests as needed.
-3. **Run the test suite** and ensure all tests pass: `python tests/run_tests.py unit`
+3. **Run the test suite** and ensure all tests pass: `python tests/run_tests.py`
 4. Ensure your code passes all tests and does not break existing functionality.
 5. Submit a pull request with a clear description of your changes.
 
@@ -237,7 +224,7 @@ This project is licensed under the MIT License. See [LICENSE](./LICENSE) for det
 
 - **FFMPEG not found:** Ensure `ffmpeg` and `ffprobe` are installed and in your system PATH.
 - **API errors:** Double-check your API keys and network connection.
-- **Test failures:** Run `python tests/run_tests.py unit` to validate system functionality.
+- **Test failures:** Run `python tests/run_tests.py` to validate system functionality.
 - **Windows users:** Use `start_app.bat` for easiest startup.
 - **Other issues:** Please open an issue or check the [Docs](./Docs) folder for more details.
 
