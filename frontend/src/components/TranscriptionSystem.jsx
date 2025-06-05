@@ -108,17 +108,8 @@ function TranscriptionSystem() {
 
             <div className="app-content" ref={appContentRef}>
                 {error && (
-                    <div className="error-message" style={{
-                        backgroundColor: '#ffebee',
-                        border: '1px solid #f44336',
-                        borderRadius: '4px',
-                        padding: '16px',
-                        margin: '16px 0',
-                        color: '#c62828',
-                        whiteSpace: 'pre-line',
-                        fontFamily: 'monospace'
-                    }}>
-                        <strong>Error:</strong> {error}
+                    <div className="error-message">
+                        <strong>Error:</strong> <p>{error}</p>
                     </div>
                 )}
                 <FileInputSegment inputOption={inputOption} showFile={showFile} handleInputOptionChange={handleInputOptionChange} handleGenerateText={handleGenerateText} onFileChange={handleFile} handleClearMedia={handleClearMedia}></FileInputSegment>
