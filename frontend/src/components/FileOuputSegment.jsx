@@ -1,11 +1,11 @@
-import react, {useState, useEffect, useMemo } from 'react';
+import react, { useState, useEffect, useMemo } from 'react';
 import Spinner from '../layout/Spinner';
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 import { jsPDF } from "jspdf";
 import { FaPen, FaSave, FaFileAlt, FaFileWord, FaFilePdf } from "react-icons/fa"
 
-function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoading}) {
+function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoading }) {
 
     const [text, setText] = useState(generatedText || "");
     const [isEditing, setIsEditing] = useState(false);
@@ -20,7 +20,7 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
         return file ? URL.createObjectURL(file) : null;
     }, [file]);
 
-    
+
     useEffect(() => {
         return () => {
             if (videoUrl) {
@@ -29,19 +29,27 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
         };
     }, [videoUrl]);
 
+    // Helper function to remove timestamps from text for export
+    const removeTimestamps = (textContent) => {
+        // Remove timestamps in format [h:mm:ss] or [m:ss] 
+        return textContent.replace(/\[\d{1,2}:\d{2}:\d{2}\]\s*/g, '').trim();
+    };
+
     const handleExportToTxt = () => {
-        const doc = new Blob([text], {type: 'text/plain'});
-        saveAs(doc,"transcription.txt")
+        const cleanText = removeTimestamps(text);
+        const doc = new Blob([cleanText], { type: 'text/plain' });
+        saveAs(doc, "transcription.txt")
     }
 
 
     const handleExportToDocx = () => {
-        const paragraphs = text.split('\n').map(line =>
+        const cleanText = removeTimestamps(text);
+        const paragraphs = cleanText.split('\n').map(line =>
             new Paragraph({
                 children: [new TextRun(line)],
             })
         );
-    
+
         const doc = new Document({
             sections: [
                 {
@@ -49,7 +57,7 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
                 },
             ],
         });
-    
+
         Packer.toBlob(doc).then(blob => {
             saveAs(blob, "transcription.docx");
         });
@@ -57,9 +65,10 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
 
 
     const handleExportToPDF = () => {
+        const cleanText = removeTimestamps(text);
         const doc = new jsPDF();
-        const lines = doc.splitTextToSize(text, 180);
-    
+        const lines = doc.splitTextToSize(cleanText, 180);
+
         doc.text(lines, 10, 10);
         doc.save("transcription.pdf");
     }
@@ -67,7 +76,7 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
     const toggleEdit = () => {
         setIsEditing((prev) => !prev);
     };
-    
+
 
 
     return (
