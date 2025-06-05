@@ -30,11 +30,22 @@ def check_dependencies():
     if missing:
         raise DependencyError(f"Missing system packages: {', '.join(missing)}")
 
-def extract_frames_to_memory(video_path: Path) -> List[Tuple[int, Image.Image]]:
+def format_timestamp(seconds: float) -> str:
+    """
+    Convert seconds to h:mm:ss format
+    Args: seconds: Time in seconds
+    Returns: Formatted timestamp string
+    """
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    seconds_remainder = int(seconds % 60)
+    return f"{hours}:{minutes:02d}:{seconds_remainder:02d}"
+
+def extract_frames_to_memory(video_path: Path) -> List[Tuple[int, Image.Image, str]]:
     
-    # Extract frames from video directly to memory for immediate processing. 
+    # Extract frames from video directly to memory for immediate processing with timestamps. 
     # Args: video_path: Path to the video file
-    # Returns: List of tuples containing (frame_number, Image) ordered chronologically
+    # Returns: List of tuples containing (frame_number, Image, timestamp_str) ordered chronologically
     
     check_dependencies()
     
@@ -81,7 +92,12 @@ def extract_frames_to_memory(video_path: Path) -> List[Tuple[int, Image.Image]]:
                     # Create a copy in memory so we can close the file
                     image_copy = image.copy()
                     image.close()
-                    frames.append((frame_number, image_copy))
+                    
+                    # Calculate timestamp based on frame number and extraction interval
+                    timestamp_seconds = frame_number * EXTRACT_EVERY_SEC
+                    timestamp_str = format_timestamp(timestamp_seconds)
+                    
+                    frames.append((frame_number, image_copy, timestamp_str))
                 except Exception as e:
                     print(f"Warning: Could not load frame {frame_number}: {e}")
                     

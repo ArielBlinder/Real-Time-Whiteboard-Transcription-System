@@ -18,9 +18,9 @@
 - **Handwriting Recognition:** Converts various handwriting styles into clear, readable digital text.
 - **Content Filtering:** Automatically excludes erased or irrelevant whiteboard content.
 - **Export Options:** Download transcriptions as `.docx`, `.pdf`, or `.txt`.
-- **User-Friendly Interface:** Responsive UI for easy interaction and review.
+- **User-Friendly Interface:** Responsive UI for easy interaction and review with timestamps.
 - **Editing and Collaboration:** Edit transcriptions and add comments before export.
-- **Comprehensive Testing:** 36 automated tests with 85% code coverage ensuring reliability.
+- **Comprehensive Testing:** 25 automated tests ensuring reliability.
 
 ---
 
@@ -77,8 +77,7 @@ pip install -r requirements.txt
 ```bash
 cd Frontend
 npm install
-# or
-yarn install
+
 ```
 
 ### 4. FFMPEG
@@ -96,13 +95,13 @@ yarn install
   ```bash
   cd Backend
   python app.py
+
   ```
 - **Frontend:**
   ```bash
   cd Frontend
   npm run dev
-  # or
-  yarn dev
+
   ```
 - Open [http://localhost:5173](http://localhost:5173) in your browser.
 
@@ -189,21 +188,6 @@ python tests/run_tests.py
    • Flask Routes & Dependencies
 ```
 
-
-## Contribution Guidelines
-
-1. Fork the repository and create a new branch for your feature or bugfix.
-2. Write clear, well-documented code and update/add tests as needed.
-3. **Run the test suite** and ensure all tests pass: `python tests/run_tests.py`
-4. Ensure your code passes all tests and does not break existing functionality.
-5. Submit a pull request with a clear description of your changes.
-
-### **Testing Requirements for Contributors**
-
-- All new features must include unit tests
-- API integrations require both unit (mocked) and integration (real API) tests
-- Performance-critical code should include performance tests
-- Maintain or improve code coverage (currently 85%)
 
 ---
 

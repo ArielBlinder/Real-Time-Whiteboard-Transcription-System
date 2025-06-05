@@ -54,27 +54,27 @@ def get_optimal_workers() -> int:
     # Ensure minimum of 2 workers for basic parallelism
     optimal_workers = max(2, int(optimal_workers))
     
-    print(f"System optimization: {cpu_cores} CPU cores detected, using {optimal_workers} workers")
+    print(f"System optimization: {cpu_cores} CPU Threads detected, using {optimal_workers} workers")
     return optimal_workers
 
-def process_frame_with_order(frame_data: Tuple[int, any]) -> Tuple[int, str]:
+def process_frame_with_order(frame_data: Tuple[int, any, str]) -> Tuple[int, str, str]:
     
-    # Process a single frame and return the result with its original order index
-    # Args:frame_data: Tuple of (frame_number,frame_itself)  
+    # Process a single frame and return the result with its original order index and timestamp
+    # Args:frame_data: Tuple of (frame_number, frame_itself, timestamp_str)  
 
-    # Returns: Tuple of (frame_number, transcribed_text)
+    # Returns: Tuple of (frame_number, transcribed_text, timestamp_str)
     
-    frame_number, frame_image = frame_data
+    frame_number, frame_image, timestamp_str = frame_data
     transcribed_text = transcribe_image(frame_image)
-    return frame_number, transcribed_text
+    return frame_number, transcribed_text, timestamp_str
 
-def process_video_frames_parallel(frames: List[Tuple[int, any]], max_workers: int = None) -> List[str]:
+def process_video_frames_parallel(frames: List[Tuple[int, any, str]], max_workers: int = None) -> List[Tuple[str, str]]:
 
     # Process video frames in parallel while maintaining chronological order
     
-    # Args: "frames": List of (frame_number, frame_itself) tuples, "max_workers": Maximum number of parallel workers (calculated if None)
+    # Args: "frames": List of (frame_number, frame_itself, timestamp_str) tuples, "max_workers": Maximum number of parallel workers (calculated if None)
         
-    # Returns: List of transcribed texts in chronological order
+    # Returns: List of (transcribed_text, timestamp_str) tuples in chronological order
 
     if not frames:
         return []
@@ -102,21 +102,23 @@ def process_video_frames_parallel(frames: List[Tuple[int, any]], max_workers: in
         # Collect results as they complete
         for future in as_completed(future_to_frame):
             try:
-                frame_number, transcribed_text = future.result()
-                results[frame_number] = transcribed_text
+                frame_number, transcribed_text, timestamp_str = future.result()
+                results[frame_number] = (transcribed_text, timestamp_str)
             except Exception as e:
                 frame_number = future_to_frame[future]
-                # Log the error of the frame
-                results[frame_number] = f"Error processing frame {frame_number}: {str(e)}"
+                # Log the error of the frame - use the timestamp from the original frame data
+                original_frame_data = next(fd for fd in frames if fd[0] == frame_number)
+                timestamp_str = original_frame_data[2]
+                results[frame_number] = (f"Error processing frame {frame_number}: {str(e)}", timestamp_str)
     
     # Sort results by frame number to maintain chronological order
     sorted_results = [results[i] for i in sorted(results.keys())]
     
-    # Filter out failed transcriptions
+    # Filter out failed transcriptions but keep timestamps
     valid_results = []
-    for text in sorted_results:
+    for text, timestamp in sorted_results:
         if text and not text.startswith('API request failed') and not text.startswith('Failed to process') and not text.startswith('Error processing'):
-            valid_results.append(text)
+            valid_results.append((text, timestamp))
     
     print(f"Successfully processed {len(valid_results)}/{len(frames)} frames")
     return valid_results
@@ -154,24 +156,24 @@ def upload_file():
             # Check if it is a video file
             if file.filename.lower().endswith(('.mp4', '.avi', '.mov', '.mkv')):
                 try:
-                    # Extract frames directly to memory for processing
+                    # Extract frames directly to memory for processing with timestamps
                     frames = extract_frames_to_memory(file_path)
                     
                     if not frames:
                         return jsonify({'error': 'No frames extracted from video'}), 400
                     
                     # Process frames in parallel with auto-optimized worker count
-                    frame_texts = process_video_frames_parallel(frames)
+                    frame_data = process_video_frames_parallel(frames)
                     
-                    if not frame_texts:
+                    if not frame_data:
                         return jsonify({'error': 'No valid text extracted from video frames'}), 400
                     
                     # Process the combined frame texts with Gemini API
                     try:
-                        processed_text = process_frames_with_gemini(frame_texts)
+                        processed_text = process_frames_with_gemini(frame_data)
                         return jsonify({
                             'text': processed_text,
-                            'frames_processed': len(frame_texts),
+                            'frames_processed': len(frame_data),
                             'total_frames': len(frames)
                         })
                     except ValueError as e:
