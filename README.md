@@ -67,7 +67,7 @@ pip install -r requirements.txt
 - **API Keys:**
   - Set your Nvidia NIM API key in `Backend/process_frames.py` (`API_KEY`)
   - Set your OpenRouter (Gemini) API key in `Backend/process_video_text.py` (`OPENROUTER_API_KEY`)
-  - _For production, use environment variables or a `.env` file for security._
+  
 
 ### 3. Frontend Setup (React)
 
