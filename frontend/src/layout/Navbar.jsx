@@ -17,8 +17,8 @@ function Navbar({ title = 'BoardCast' }) {
                     </Link>
                 </div>
                 <div className="links">
-                    <Link to="/user-menual" className="linkBtn">
-                        User Menual
+                    <Link to="/user-manual" className="linkBtn">
+                        User Manual
                     </Link>
                     <Link to="/about" className="linkBtn">
                         About
