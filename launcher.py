@@ -56,7 +56,7 @@ def main():
     print("\n🚀 BoardCast")
     print("=" * 50)
     cpu_cores = os.cpu_count() or 4
-    print(f"💻 System: {cpu_cores} CPU cores detected")
+    print(f"💻 System: {cpu_cores} CPU Threads detected")
     print("🌐 Starting server...")
     print("=" * 50 + "\n")
     

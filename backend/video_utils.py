@@ -31,11 +31,13 @@ def check_dependencies():
         raise DependencyError(f"Missing system packages: {', '.join(missing)}")
 
 def format_timestamp(seconds: float) -> str:
-    """
-    Convert seconds to h:mm:ss format
-    Args: seconds: Time in seconds
-    Returns: Formatted timestamp string
-    """
+    
+    # Convert seconds to h:mm:ss format
+    
+    # Args: seconds: Time in seconds
+    
+    # Returns: Formatted timestamp string
+    
     hours = int(seconds // 3600)
     minutes = int((seconds % 3600) // 60)
     seconds_remainder = int(seconds % 60)

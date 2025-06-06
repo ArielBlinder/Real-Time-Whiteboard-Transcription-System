@@ -71,7 +71,7 @@ pip install -r requirements.txt
 
 ### 3. Frontend Setup (React)
 
-- **Requirements:** Node.js (v18+), npm or yarn
+- **Requirements:** Node.js (v18+), npm 
 - **Install dependencies:**
 
 ```bash
@@ -83,7 +83,10 @@ npm install
 ### 4. FFMPEG
 
 - **Required for video processing.**
-- [Download FFMPEG](https://ffmpeg.org/download.html) and ensure `ffmpeg` and `ffprobe` are in your system PATH.
+- [Download FFMPEG](https://www.gyan.dev/ffmpeg/builds/)
+- Choose the latest ffmpeg-git-essentials.7z, extract it to a folder in you C:\ drive
+- Add it to the PATH in: Click on the start menu -> type: Edit environment variables for your account ->
+- Click on path -> Click Edit -> Click new -> add the ffmpeg path e.g: C:\ffmpeg\bin -> Click enter on the keyboard then ok
 
 ### 5. Quick Start (Windows)
 
@@ -156,7 +159,7 @@ The project includes a comprehensive test suite with 25 tests covering all aspec
   - **Performance Tests:** Benchmarking and scaling validation
   - **Edge Case Tests:** Boundary conditions and error handling
 
-### **Running Tests (Ultra-Simple)**
+### **Running Tests**
 
 ```bash
 # Navigate to Backend directory
@@ -188,15 +191,6 @@ python tests/run_tests.py
    • Flask Routes & Dependencies
 ```
 
-
----
-
-## License
-
-This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
-
----
-
 ## Authors & Credits
 
 - **Ariel Blinder**
@@ -206,7 +200,7 @@ This project is licensed under the MIT License. See [LICENSE](./LICENSE) for det
 
 ## Troubleshooting & FAQ
 
-- **FFMPEG not found:** Ensure `ffmpeg` and `ffprobe` are installed and in your system PATH.
+- **FFMPEG not found:** Ensure `ffmpeg` is installed and in your system PATH, refer to the "Required for video processing" section
 - **API errors:** Double-check your API keys and network connection.
 - **Test failures:** Run `python tests/run_tests.py` to validate system functionality.
 - **Windows users:** Use `start_app.bat` for easiest startup.
@@ -220,3 +214,11 @@ This project is licensed under the MIT License. See [LICENSE](./LICENSE) for det
 - See `Backend/tests/README.md` for comprehensive testing documentation.
 - For FFMPEG help: [FFMPEG Documentation](https://ffmpeg.org/documentation.html)
 - For Nvidia NIM and OpenRouter API docs, see their respective official sites.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
+
+---
