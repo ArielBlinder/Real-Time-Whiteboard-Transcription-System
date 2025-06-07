@@ -6,6 +6,8 @@ function FileInputSegment({ inputOption, showFile, handleInputOptionChange, hand
     const [inputFile, setInputFile] = useState(null);
     const fileInputRef = useRef(null);
 
+    
+    // remove the current file when changing file option
     useEffect(() => {
         setInputFile(null);
         if (fileInputRef.current) {
@@ -13,6 +15,7 @@ function FileInputSegment({ inputOption, showFile, handleInputOptionChange, hand
         }
     }, [inputOption]);
 
+    // when reciving a file sets the input file as this file
     function handleFileChange(e){
         console.log("file uploaded")
         const selectedFile = e.target.files[0];
@@ -22,10 +25,12 @@ function FileInputSegment({ inputOption, showFile, handleInputOptionChange, hand
         }
     }
 
+    // set the type of input when pressing the types buttons
     function triggerFileInput() {
         fileInputRef.current.click();
     }
 
+    // remove the current file when pressing "clear media"
     function clearInputFile() {
         setInputFile(null);
         if (fileInputRef.current) {
@@ -34,8 +39,6 @@ function FileInputSegment({ inputOption, showFile, handleInputOptionChange, hand
     }
 
    
-
-
 
     return(
         <div>

@@ -28,6 +28,7 @@ function TranscriptionSystem() {
         }
     }
 
+    // recives the text from th backend
     const handleGenerateText = async () => {
         if (!file) return;
 
@@ -45,11 +46,11 @@ function TranscriptionSystem() {
 
             const data = await response.json();
             
-            if (!response.ok) {
+            if (!response.ok) { // if couldn't get the data sends an error messege and set all to be empty
                 setError(data.error || "An error occurred while processing your file");
                 setGeneratedText("");
                 setShowFile(false);
-            } else {
+            } else { // if recive data then set the text to be the data
                 setGeneratedText(data.text);
                 setShowFile(true);
                 setShowLandingPage(false);
@@ -65,12 +66,14 @@ function TranscriptionSystem() {
         }
     };
 
+    // set the file to be the input file
     const handleFile = (file) => {
         console.log(inputOption);
         setFile(file)
         setError(""); 
     }
 
+    // set the file to be empty if pressing "clear data"
     function handleClearMedia() {
         const comfirmClear = window.confirm(`Are you sure you want to clear this ${inputOption}?`)
         if (comfirmClear) {
@@ -81,18 +84,11 @@ function TranscriptionSystem() {
         }
     }
 
+    // move the landing page when pressing "get started"
     const handleGetStarted = () => {
         if (appContentRef.current)
             appContentRef.current.scrollIntoView({ behavior: "smooth" })
     }
-
-    // colors
-    // #DDF8F2
-    // #26A688
-    // #B4EEE0
-
-
-
 
     return (
 
