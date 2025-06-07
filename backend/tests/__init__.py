@@ -2,31 +2,29 @@
 Real-Time Whiteboard Transcription System - Comprehensive Test Suite
 
 This package contains a complete test suite for the whiteboard transcription system
-with 36 tests covering all aspects of the application including NVIDIA OCR integration,
+with 25 tests covering all aspects of the application including NVIDIA OCR integration,
 Gemini processing, Flask routes, error handling, and performance validation.
 
  Test Categories:
-- Unit Tests (25): Fast, isolated tests with mocked dependencies
-  • API key validation and error handling
-  • Worker optimization and system scaling  
-  • Image processing and preparation
-  • NVIDIA OCR unit tests (mocked API calls)
-  • Frame processing and parallel execution
-  • Gemini video processing (mocked)
-  • Flask routes and endpoint testing
-  • Dependency management validation
-  • API retry logic and rate limiting
+- Unit Tests (21): Fast, isolated tests with mocked dependencies
+  • API key validation and error handling (2 tests)
+  • Worker optimization and system scaling (2 tests)
+  • Image processing and preparation (2 tests)
+  • NVIDIA OCR unit tests with mocked API calls (3 tests)
+  • Frame processing and parallel execution (2 tests)
+  • Gemini video processing with mocked APIs (2 tests)
+  • Flask routes and endpoint testing (2 tests)
+  • Dependency management validation (2 tests)
+  • API retry logic and rate limiting (1 test)
+  • Edge cases and error handling (3 tests)
 
-- Integration Tests (8): End-to-end tests with real API calls
-  • NVIDIA OCR real API integration
-  • Gemini API real integration  
-  • End-to-end pipeline testing (NVIDIA → Gemini)
-  • Error handling with real APIs
+- Integration Tests (3): End-to-end tests with real API calls
+  • NVIDIA OCR real API integration (1 test)
+  • Gemini API real integration (2 tests)
+  • End-to-end pipeline testing (NVIDIA → Gemini) (integrated in above)
 
-- Performance Tests (3): Benchmarking and scaling validation
-  • Large frame processing performance
-  • Worker scaling efficiency
-  • NVIDIA API response time measurement
+- Performance Tests (1): Benchmarking and scaling validation
+  • Large frame processing performance (1 test)
 
  Coverage:
 - Total Code Coverage: ~85%
@@ -64,12 +62,12 @@ Gemini processing, Flask routes, error handling, and performance validation.
 __version__ = "1.0.0"
 __author__ = "Ariel Blinder & Saar Attarchi"
 __test_count__ = {
-    "unit": 25,
-    "integration": 8, 
-    "performance": 3,
-    "total": 36
+    "unit": 21,
+    "integration": 3, 
+    "performance": 1,
+    "total": 25
 }
 __coverage__ = "~85%"
 __last_updated__ = "2024-12-19"
 __test_framework__ = "pytest"
-__supported_apis__ = ["NVIDIA_NIM", "OpenRouter_Gemini"] 
+__supported_apis__ = ["NVIDIA_NIM", "OpenRouter_Gemini"]

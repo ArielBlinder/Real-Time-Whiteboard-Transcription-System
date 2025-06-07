@@ -67,11 +67,10 @@ pip install -r requirements.txt
 - **API Keys:**
   - Set your Nvidia NIM API key in `Backend/process_frames.py` (`API_KEY`)
   - Set your OpenRouter (Gemini) API key in `Backend/process_video_text.py` (`OPENROUTER_API_KEY`)
-  
 
 ### 3. Frontend Setup (React)
 
-- **Requirements:** Node.js (v18+), npm 
+- **Requirements:** Node.js (v18+), npm
 - **Install dependencies:**
 
 ```bash
@@ -95,17 +94,21 @@ npm install
 ### 6. Manual Start (All Platforms)
 
 - **Backend:**
+
   ```bash
   cd Backend
   python app.py
 
   ```
+
 - **Frontend:**
+
   ```bash
   cd Frontend
   npm run dev
 
   ```
+
 - Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
@@ -138,7 +141,7 @@ npm install
 
 ### Python Dependencies (from `requirements.txt`)
 
-- Flask, flask-cors, python-docx, pypdf, Pillow, requests, opencv-python, numpy, python-dotenv, pyinstaller, psutil, pywin32
+- Flask, flask-cors, Pillow, requests, psutil, pywin32
 
 ### Frontend Dependencies (from `package.json`)
 
@@ -161,7 +164,7 @@ The project includes a comprehensive test suite with 25 tests covering all aspec
 
 ### **Running Tests**
 
-```bash
+````bash
 # Navigate to Backend directory
 cd Backend
 
@@ -189,7 +192,7 @@ python tests/run_tests.py
    • Error Handling & Edge Cases
    • Performance & Parallel Processing
    • Flask Routes & Dependencies
-```
+````
 
 ## Authors & Credits
 

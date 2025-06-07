@@ -46,7 +46,7 @@ function FileInputSegment({ inputOption, showFile, handleInputOptionChange, hand
             <div className='file-container'>
                 <div className='input-container' onClick={triggerFileInput}>
                     {inputFile ? <span>Selected file: {inputFile.name}</span> : <><FaUpload style={{margin: "15px", width: "20px", height: "20px"}}></FaUpload> <span>insert {inputOption} to transcribe to text</span></>}
-                    <input type='file' ref={fileInputRef}  style={{ display: 'none' }} accept={inputOption === "image" ? "image/*" : "video/*"} onChange={handleFileChange}/>
+                    <input type='file' ref={fileInputRef}  style={{ display: 'none' }} accept={inputOption === "image" ? "image/" : "video/"} onChange={handleFileChange}/>
                 </div>
                 <label id="pictureOptn">
                 <input type="radio" value="image" checked={inputOption === "image"} onChange={handleInputOptionChange}></input>

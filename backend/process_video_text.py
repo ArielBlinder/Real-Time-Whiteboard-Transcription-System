@@ -5,7 +5,7 @@ import time
 from typing import List, Tuple
 
 # IMPORTANT: Replace with your API key, Get it from https://openrouter.ai/settings/keys
-OPENROUTER_API_KEY = "ADD_KEY_HERE" 
+OPENROUTER_API_KEY = "" 
 
 def process_frames_with_gemini(frame_data: List[Tuple[str, str]]) -> str:
     # Process a list of OCR texts with timestamps from video frames using Gemini API
