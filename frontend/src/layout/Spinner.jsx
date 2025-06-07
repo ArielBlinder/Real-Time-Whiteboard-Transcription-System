@@ -1,9 +1,9 @@
-import spinner from '../Files/loading.gif'
 
 function Spinner() {
   return (
-    <div className='spinner'>
-      <img src={spinner}></img>
+    <div className="loading-container">
+      <div className="spinner" />
+      <p>Analyzing your video, please wait...</p>
     </div>
   )
 }
