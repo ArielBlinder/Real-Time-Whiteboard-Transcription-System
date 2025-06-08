@@ -37,7 +37,7 @@ def main():
             print("\n❌ Some tests failed!")
             print("\n💡 Common Issues:")
             print("   • Set NVIDIA_API_KEY for integration tests")
-            print("   • Set OPENROUTER_API_KEY for Gemini tests") 
+            print("   • Set GEMINI_API_KEY for Google AI Studio tests") 
             print("   • Install FFmpeg for dependency tests")
             print("   • Check internet connection for API tests")
             

@@ -29,7 +29,7 @@
 - **Frontend:** React.js, Material-UI
 - **Backend:** Python (Flask), Llama 4 Scout LLM, Gemini 2.0 flash
 - **Video Processing:** FFMPEG (frame extraction, enhancement)
-- **APIs:** Nvidia NIM for Llama 4 Scout , OpenRouter for Gemini 2.0 flash
+- **APIs:** Nvidia NIM for Llama 4 Scout , Google AI Studio for Gemini 2.0 flash
 
 ### Project Structure
 
@@ -65,8 +65,8 @@ pip install -r requirements.txt
 ```
 
 - **API Keys:**
-  - Set your Nvidia NIM API key in `Backend/process_frames.py` (`API_KEY`)
-  - Set your OpenRouter (Gemini) API key in `Backend/process_video_text.py` (`OPENROUTER_API_KEY`)
+  - Set your Nvidia NIM API key in `Backend/process_frames.py` (`API_KEY`) get it from https://build.nvidia.com/settings/api-keys
+  - Set your Google AI Studio (Gemini) API key in `Backend/process_video_text.py` (`GEMINI_API_KEY`) get if from https://aistudio.google.com/apikey
 
 ### 3. Frontend Setup (React)
 
@@ -137,7 +137,7 @@ npm install
 - Node.js 18+
 - FFMPEG (in PATH)
 - Nvidia NIM API key
-- OpenRouter API key
+- Google AI Studio API key
 
 ### Python Dependencies (from `requirements.txt`)
 
@@ -216,7 +216,7 @@ python tests/run_tests.py
 - See `/Docs` for detailed design, requirements, and competitor analysis.
 - See `Backend/tests/README.md` for comprehensive testing documentation.
 - For FFMPEG help: [FFMPEG Documentation](https://ffmpeg.org/documentation.html)
-- For Nvidia NIM and OpenRouter API docs, see their respective official sites.
+- For Nvidia NIM and Google AI Studio API docs, see their respective official sites.
 
 ---
 

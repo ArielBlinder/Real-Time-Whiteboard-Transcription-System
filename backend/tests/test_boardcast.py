@@ -17,7 +17,7 @@ from app import (
     process_frame_with_order, process_video_frames_parallel
 )
 from process_frames import prepare_image, transcribe_image, NVIDIA_API_KEY
-from process_video_text import process_frames_with_gemini, make_api_request_with_retry, OPENROUTER_API_KEY
+from process_video_text import process_frames_with_gemini, make_api_request_with_retry, GEMINI_API_KEY
 from video_utils import check_dependencies, extract_frames_to_memory, DependencyError
 
 # UNIT TESTS 
@@ -27,7 +27,7 @@ class TestAPIKeyValidation:
     
     # Test 1: Valid API keys
     @patch('app.NVIDIA_API_KEY', 'valid_nvidia_key')
-    @patch('app.OPENROUTER_API_KEY', 'valid_openrouter_key')
+    @patch('app.GEMINI_API_KEY', 'valid_gemini_key')
     def test_check_api_keys_valid(self):
         # Test that valid API keys pass validation
         is_valid, error_msg = check_api_keys()
@@ -36,13 +36,13 @@ class TestAPIKeyValidation:
     
     # Test 2: Invalid API keys
     @patch('app.NVIDIA_API_KEY', 'ADD_KEY_HERE')
-    @patch('app.OPENROUTER_API_KEY', 'ADD_KEY_HERE')
+    @patch('app.GEMINI_API_KEY', 'ADD_KEY_HERE')
     def test_check_api_keys_invalid(self):
         # Test that placeholder API keys fail validation with appropriate error messages
         is_valid, error_msg = check_api_keys()
         assert is_valid is False
         assert "NVIDIA API key not set" in error_msg
-        assert "OpenRouter API key not set" in error_msg
+        assert "Google AI Studio API key not set" in error_msg
 
 
 class TestWorkerOptimization:
@@ -168,7 +168,7 @@ class TestVideoProcessing:
     
     # Test 12: Gemini processing success
     @patch('process_video_text.make_api_request_with_retry')
-    @patch('process_video_text.OPENROUTER_API_KEY', 'valid_key')
+    @patch('process_video_text.GEMINI_API_KEY', 'valid_key')
     def test_process_frames_with_gemini_success(self, mock_api_request):
         # Test successful processing of frame texts with Gemini API
         mock_response = Mock()
@@ -184,12 +184,12 @@ class TestVideoProcessing:
         mock_api_request.assert_called_once()
     
     # Test 13: Gemini processing without API key
-    @patch('process_video_text.OPENROUTER_API_KEY', '')
+    @patch('process_video_text.GEMINI_API_KEY', '')
     def test_process_frames_with_gemini_no_api_key(self):
         # Test Gemini processing fails gracefully without API key
         frame_texts = ["Sample text"]
         
-        with pytest.raises(ValueError, match="OPENROUTER_API_KEY environment variable is not set"):
+        with pytest.raises(ValueError, match="GEMINI_API_KEY environment variable is not set"):
             process_frames_with_gemini(frame_texts)
 
 
@@ -300,8 +300,8 @@ class TestGeminiIntegration:
     
     def setup_method(self):
         # Check if Gemini integration tests can run
-        if not OPENROUTER_API_KEY or OPENROUTER_API_KEY == "ADD_KEY_HERE":
-            pytest.skip("Gemini integration tests require a valid OPENROUTER_API_KEY")
+        if not GEMINI_API_KEY or GEMINI_API_KEY == "ADD_KEY_HERE":
+            pytest.skip("Gemini integration tests require a valid GEMINI_API_KEY")
     
     # Test 20: Real Gemini API integration
     def test_gemini_integration_real_api(self):
@@ -332,8 +332,8 @@ class TestEndToEndIntegration:
         # Check if end-to-end integration tests can run
         if not NVIDIA_API_KEY or NVIDIA_API_KEY == "ADD_KEY_HERE":
             pytest.skip("End-to-end tests require a valid NVIDIA_API_KEY")
-        if not OPENROUTER_API_KEY or OPENROUTER_API_KEY == "ADD_KEY_HERE":
-            pytest.skip("End-to-end tests require a valid OPENROUTER_API_KEY")
+        if not GEMINI_API_KEY or GEMINI_API_KEY == "ADD_KEY_HERE":
+            pytest.skip("End-to-end tests require a valid GEMINI_API_KEY")
     
     # Test 22: Full pipeline test (NVIDIA OCR + Gemini processing)
     def test_full_pipeline_real_apis(self):

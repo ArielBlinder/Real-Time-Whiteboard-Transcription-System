@@ -51,7 +51,7 @@ Gemini processing, Flask routes, error handling, and performance validation.
 
  API Requirements:
   - NVIDIA_API_KEY: For NVIDIA OCR integration tests
-  - OPENROUTER_API_KEY: For Gemini API integration tests
+  - GEMINI_API_KEY: For Google AI Studio API integration tests
   
  Performance Targets:
   - Unit tests: <1 second execution
@@ -70,4 +70,4 @@ __test_count__ = {
 __coverage__ = "~85%"
 __last_updated__ = "2024-12-19"
 __test_framework__ = "pytest"
-__supported_apis__ = ["NVIDIA_NIM", "OpenRouter_Gemini"]
+__supported_apis__ = ["NVIDIA_NIM", "GoogleAI_Gemini"]

@@ -2,7 +2,7 @@
 
 This directory contains a comprehensive test suite for BoardCast, The tests are organized into multiple categories to ensure complete coverage of all application functionality.
 
-##  Test Structure
+## Test Structure
 
 ```
 tests/
@@ -27,6 +27,7 @@ python tests/run_tests.py
 ```
 
 **That's it!** No arguments, no options, no complexity. The script automatically:
+
 - Runs all 25 tests in `test_boardcast.py`
 - Provides clear output and error messages
 - Shows test coverage summary
@@ -185,7 +186,7 @@ These tests require valid API keys and make real API calls. They verify end-to-e
 ```
 ✅ Real Gemini API processes frame texts successfully
 ✅ Empty input handled appropriately
-⚠️  Requires valid OPENROUTER_API_KEY
+⚠️  Requires valid GEMINI_API_KEY
 ```
 
 #### **End-to-End Integration (Test 22)**
@@ -197,7 +198,7 @@ These tests require valid API keys and make real API calls. They verify end-to-e
 ```
 ✅ Full pipeline processes images through both APIs
 ✅ OCR results flow correctly to Gemini processing
-⚠️  Requires both NVIDIA_API_KEY and OPENROUTER_API_KEY
+⚠️  Requires both NVIDIA_API_KEY and GEMINI_API_KEY
 ```
 
 ### **3. Performance Tests (Test 23)**
@@ -249,18 +250,18 @@ set NVIDIA_API_KEY=your_nvidia_api_key_here
 export NVIDIA_API_KEY=your_nvidia_api_key_here
 ```
 
-### **2. OpenRouter API Key**
+### **2. Google AI Studio API Key**
 
-1. Visit [OpenRouter](https://openrouter.ai/settings/keys)
+1. Visit [Google AI Studio](https://ai.google.dev/)
 2. Create an account and generate an API key
 3. Set the environment variable:
 
 ```bash
 # Windows
-set OPENROUTER_API_KEY=your_openrouter_api_key_here
+set GEMINI_API_KEY=your_gemini_api_key_here
 
-# Linux/Mac  
-export OPENROUTER_API_KEY=your_openrouter_api_key_here
+# Linux/Mac
+export GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 ## Running Tests
@@ -274,6 +275,7 @@ python tests/run_tests.py
 ```
 
 **Features:**
+
 - **Zero Configuration:** No arguments, no flags, no options
 - **Runtime:** ~10-15 seconds for all tests
 - **Requirements:** Optional API keys for integration tests
@@ -281,6 +283,7 @@ python tests/run_tests.py
 - **Error Handling:** Clear messages for common issues
 
 **Example Output:**
+
 ```
 🧪 Running All Tests in test_boardcast.py
 ============================================================
