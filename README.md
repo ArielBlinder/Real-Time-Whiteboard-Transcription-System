@@ -237,6 +237,7 @@ pip install -r tests/test_requirements.txt
 # Run ALL tests
 python tests/run_tests.py
 
+```
 
 ## Authors & Credits
 
