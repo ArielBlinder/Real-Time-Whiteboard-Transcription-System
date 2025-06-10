@@ -8,7 +8,7 @@ function TranscriptionSystem() {
     const [inputOption, setInputOption] = useState("image");
     const [file, setFile] = useState("");
     const [showFile, setShowFile] = useState(false);
-    const [generatedText, setGeneratedText] = useState("");
+    const [transcribedText, setTranscribedText] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [showLandingPage, setShowLandingPage] = useState(true);
     const [error, setError] = useState("");
@@ -18,18 +18,18 @@ function TranscriptionSystem() {
 
     // changes file based on input type
     function handleInputOptionChange(e) {
-        const comfirmChange = window.confirm("Are you sure you want to change the type of input?")
+        const comfirmChange = window.confirm("Are you sure you want to change the type of file, and clear the content?");
         if (comfirmChange) {
             setInputOption(e.target.value);
             setFile(null);
             setShowFile(false);
-            setGeneratedText("");
+            setTranscribedText("");
             setError(""); 
         }
     }
 
     // recives the text from th backend
-    const handleGenerateText = async () => {
+    const handleTranscribeText = async () => {
         if (!file) return;
 
         setIsLoading(true);
@@ -48,10 +48,10 @@ function TranscriptionSystem() {
             
             if (!response.ok) { // if couldn't get the data sends an error messege and set all to be empty
                 setError(data.error || "An error occurred while processing your file");
-                setGeneratedText("");
+                setTranscribedText("");
                 setShowFile(false);
             } else { // if recive data then set the text to be the data
-                setGeneratedText(data.text);
+                setTranscribedText(data.text);
                 setShowFile(true);
                 setShowLandingPage(false);
                 setError(""); 
@@ -59,7 +59,7 @@ function TranscriptionSystem() {
         } catch (error) {
             console.error("Upload error:", error);
             setError("Upload error: Unable to upload file");
-            setGeneratedText("");
+            setTranscribedText("");
             setShowFile(false);
         } finally {
             setIsLoading(false);
@@ -69,25 +69,25 @@ function TranscriptionSystem() {
     // set the file to be the input file
     const handleFile = (file) => {
         console.log(inputOption);
-        setFile(file)
+        setFile(file);
         setError(""); 
     }
 
     // set the file to be empty if pressing "clear data"
     function handleClearMedia() {
-        const comfirmClear = window.confirm(`Are you sure you want to clear this ${inputOption}?`)
+        const comfirmClear = window.confirm(`Are you sure you want to clear this ${inputOption}?`);
         if (comfirmClear) {
             setFile(null);
             setShowFile(false);
-            setGeneratedText("");
+            setTranscribedText("");
             setError(""); 
         }
     }
 
     // move the landing page when pressing "get started"
     const handleGetStarted = () => {
-        if (appContentRef.current)
-            appContentRef.current.scrollIntoView({ behavior: "smooth" })
+        if (appContentRef.current);
+            appContentRef.current.scrollIntoView({ behavior: "smooth" });
     }
 
     return (
@@ -108,8 +108,8 @@ function TranscriptionSystem() {
                         <strong>Error:</strong> <p>{error}</p>
                     </div>
                 )}
-                <FileInputSegment inputOption={inputOption} showFile={showFile} handleInputOptionChange={handleInputOptionChange} handleGenerateText={handleGenerateText} onFileChange={handleFile} handleClearMedia={handleClearMedia}></FileInputSegment>
-                <FileOuputSegment inputOption={inputOption} file={file} showFile={showFile} generatedText={generatedText} isLoading={isLoading}></FileOuputSegment>
+                <FileInputSegment inputOption={inputOption} showFile={showFile} handleInputOptionChange={handleInputOptionChange} handleTranscribeText={handleTranscribeText} onFileChange={handleFile} handleClearMedia={handleClearMedia}></FileInputSegment>
+                <FileOuputSegment inputOption={inputOption} file={file} showFile={showFile} transcribedText={transcribedText} isLoading={isLoading}></FileOuputSegment>
             </div>
 
         </>

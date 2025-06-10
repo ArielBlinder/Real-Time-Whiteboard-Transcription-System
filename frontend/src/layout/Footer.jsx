@@ -1,5 +1,5 @@
 function Footer() {
-    const footerYear = new Date().getFullYear()
+    const footerYear = new Date().getFullYear();
 
 
   return (

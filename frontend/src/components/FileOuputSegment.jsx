@@ -3,11 +3,11 @@ import Spinner from '../layout/Spinner';
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 import { jsPDF } from "jspdf";
-import { FaPen, FaSave, FaFileAlt, FaFileWord, FaFilePdf } from "react-icons/fa"
+import { FaPen, FaSave, FaFileAlt, FaFileWord, FaFilePdf } from "react-icons/fa";
 
-function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoading }) {
+function FileOuputSegment({ inputOption, file, showFile, transcribedText, isLoading }) {
 
-    const [text, setText] = useState(generatedText || "");
+    const [text, setText] = useState(transcribedText || "");
     const [isEditing, setIsEditing] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const videoRef = useRef(null);
@@ -28,10 +28,10 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
         };
     }, [videoUrl]);
 
-    // sets the generated text as text
+    // sets the transcribed text as text
     useEffect(() => {
-        setText(generatedText || "");
-    }, [generatedText]);
+        setText(transcribedText || "");
+    }, [transcribedText]);
 
      // Parse timestamps and text segments
      const textSegments = useMemo(() => {
@@ -97,7 +97,7 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
     // Handle clicking on a timestamp to get to thqt time in the video  
     const handleTimestampClick = (timeInSeconds) => {
         if (videoRef.current) {
-            videoRef.current.currentTime = timeInSeconds
+            videoRef.current.currentTime = timeInSeconds;
         }  
     }
 
@@ -113,7 +113,7 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
     const handleExportToTxt = () => {
         const cleanText = removeTimestamps(text);
         const doc = new Blob([cleanText], { type: 'text/plain' });
-        saveAs(doc, "transcription.txt")
+        saveAs(doc, "transcription.txt");
     }
 
     
@@ -163,10 +163,10 @@ function FileOuputSegment({ inputOption, file, showFile, generatedText, isLoadin
                     {file && showFile && inputOption === "image" && (<img className='responsive-media' src={URL.createObjectURL(file)} ></img>)}
                 </div>
                 {file && showFile && (
-                    <div className='generated-text'>
-                        <div className='generated-text-container'>
-                            <div className='generated-text-header'>
-                                Generated Text
+                    <div className='transcribed-text'>
+                        <div className='transcribed-text-container'>
+                            <div className='transcribed-text-header'>
+                                Transcribed Text
                             </div>
                             <section id='text-area'>
                                 <button className='edit-button' onClick={toggleEdit} title={`Click to ${isEditing ? 'save edited text' : 'edit text'}`}>

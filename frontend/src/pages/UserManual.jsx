@@ -1,4 +1,5 @@
-import picture from "../Files/picture_text.png"
+import picture from "../Files/picture_text.png";
+import video from "../Files/video_text.png";
 
 function UserManual() {
     return (
@@ -9,7 +10,7 @@ function UserManual() {
             <section>
                 <h4>Upload Your Media</h4>
                     <p>Start by selecting the media file you want to transcribe — either an <strong>image</strong> or a <strong>video</strong>.</p>
-                    <p>Then, simply click the <b>"Generate Text"</b> button.</p><br />
+                    <p>Then, simply click the <b>"Transcribe Text"</b> button.</p><br />
                     <img src={picture} alt="Upload example" className="manual-image"></img><br /><br />
             </section>
 
@@ -17,7 +18,7 @@ function UserManual() {
                 <h4>View the Transcription</h4>
                 <p>Your file will be displayed on the website. The system will automatically display the transcribed text next to it, in an easy-to-read format.</p>
                 <p>If it's a video, it will play in an integrated media player, and the transcription will include <strong>timestamps</strong> to help you follow when each part was written.</p><br /><br />
-                <img src={picture} style={{ minWidth: "70%", maxWidth: "300px" }} /><br /><br />
+                <img src={video} alt="Upload example" className="manual-image"></img><br /><br />
             </section>           
 
             <section>

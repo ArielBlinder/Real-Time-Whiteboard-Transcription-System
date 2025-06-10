@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import TranscriptionSystem from './components/TranscriptionSystem';
 import Navbar from './layout/Navbar';
 import About from './pages/About';
