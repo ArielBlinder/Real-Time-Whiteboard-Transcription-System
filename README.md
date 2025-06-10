@@ -184,12 +184,12 @@ ffmpeg -version
 
 ### Image Transcription
 
-![Whiteboard Image Transcription](frontend\src\Files\picture_text.png)
+![Whiteboard Image Transcription](frontend/src/Files/picture_text.png)
 _Example of transcribing handwritten math problems from a whiteboard image_
 
 ### Video Transcription
 
-![Video Transcription Interface](frontend\src\Files\video_text.png)
+![Video Transcription Interface](frontend/src/Files/video_text.png)
 _Real-time transcription of educational content from video with timeline support_
 
 ---
