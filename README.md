@@ -65,8 +65,10 @@ pip install -r requirements.txt
 ```
 
 - **API Keys:**
-  - Set your Nvidia NIM API key in `Backend/process_frames.py` (`API_KEY`) get it from https://build.nvidia.com/settings/api-keys
-  - Set your Google AI Studio (Gemini) API key in `Backend/process_video_text.py` (`GEMINI_API_KEY`) get if from https://aistudio.google.com/apikey
+  - Set your Nvidia NIM API key in `Backend/process_frames.py` (`API_KEY`) 
+  - Get it from https://build.nvidia.com/settings/api-keys
+  - Set your Google AI Studio (Gemini) API key in `Backend/process_video_text.py` (`GEMINI_API_KEY`) 
+  - Get if from https://aistudio.google.com/apikey
 
 ### 3. Frontend Setup (React)
 
@@ -79,13 +81,63 @@ npm install
 
 ```
 
-### 4. FFMPEG
+### 4. FFMPEG Setup
 
-- **Required for video processing.**
-- [Download FFMPEG](https://www.gyan.dev/ffmpeg/builds/)
-- Choose the latest ffmpeg-git-essentials.7z, extract it to a folder in you C:\ drive
-- Add it to the PATH in: Click on the start menu -> type: Edit environment variables for your account ->
-- Click on path -> Click Edit -> Click new -> add the ffmpeg path e.g: C:\ffmpeg\bin -> Click enter on the keyboard then ok
+**Required for video processing.**
+
+#### Windows
+
+1. **Download**  
+   Get the latest `ffmpeg-git-essentials.7z` from:  
+   [https://www.gyan.dev/ffmpeg/builds/](https://www.gyan.dev/ffmpeg/builds/)
+
+2. **Extract**  
+   Use 7-Zip or WinRAR to extract the archive to:  
+   ```
+   C:\ffmpeg
+   ```
+
+3. **Add to PATH**  
+   - Open **Start** → search: `Edit environment variables for your account`  
+   - Under **User variables**, select `Path` → click **Edit**  
+   - Click **New** → paste:
+     ```
+     C:\ffmpeg\bin
+     ```
+   - Press **Enter**, then click **OK**
+
+4. **Verify Installation**  
+   Open Command Prompt and run:
+   ```bash
+   ffmpeg -version
+   ```
+
+#### macOS
+
+**Install with Homebrew:**
+```bash
+brew install ffmpeg
+```
+
+*Don't have Homebrew? Install it from: https://brew.sh*
+
+**Verify Installation:**
+```bash
+ffmpeg -version
+```
+
+#### Linux
+
+**Install FFmpeg:**
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+**Verify Installation:**
+```bash
+ffmpeg -version
+```
 
 ### 5. Quick Start (Windows)
 
@@ -164,7 +216,7 @@ The project includes a comprehensive test suite with 25 tests covering all aspec
 
 ### **Running Tests**
 
-````bash
+```bash
 # Navigate to Backend directory
 cd Backend
 
@@ -173,7 +225,6 @@ pip install -r tests/test_requirements.txt
 
 # Run ALL tests
 python tests/run_tests.py
-
 
 ### **Test Results Example**
 
@@ -192,7 +243,7 @@ python tests/run_tests.py
    • Error Handling & Edge Cases
    • Performance & Parallel Processing
    • Flask Routes & Dependencies
-````
+```
 
 ## Authors & Credits
 

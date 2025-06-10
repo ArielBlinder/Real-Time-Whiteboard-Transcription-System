@@ -23,7 +23,7 @@ def check_api_keys() -> tuple[bool, str]:
         errors.append("NVIDIA API key not set.\nPlease add your API key in process_frames.py file.\nGet your API key from https://build.nvidia.com/settings/api-keys")
     
     if GEMINI_API_KEY == "ADD_KEY_HERE":
-        errors.append("Google AI Studio API key not set.\nPlease add your API key in process_video_text.py file.\nGet your API key from https://ai.google.dev/")
+        errors.append("Google AI Studio API key not set.\nPlease add your API key in process_video_text.py file.\nGet your API key from https://aistudio.google.com/apikey")
     
     if errors:
         return False, "\n\n".join(errors)

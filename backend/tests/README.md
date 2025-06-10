@@ -252,7 +252,7 @@ export NVIDIA_API_KEY=your_nvidia_api_key_here
 
 ### **2. Google AI Studio API Key**
 
-1. Visit [Google AI Studio](https://ai.google.dev/)
+1. Visit [Google AI Studio](https://aistudio.google.com/apikey)
 2. Create an account and generate an API key
 3. Set the environment variable:
 
@@ -266,7 +266,7 @@ export GEMINI_API_KEY=your_gemini_api_key_here
 
 ## Running Tests
 
-### **Ultra-Simple Test Runner (Only Way)**
+### **Test Runner (Only Way)**
 
 The test runner is zero-configuration:
 
