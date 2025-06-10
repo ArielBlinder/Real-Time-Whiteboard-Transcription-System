@@ -270,4 +270,3 @@ python tests/run_tests.py
 This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
 
 ---
-```
