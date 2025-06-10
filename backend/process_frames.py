@@ -13,7 +13,7 @@ MAX_BASE64_SIZE = 180_000
 # API URL
 API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
 # IMPORTANT: Replace with your API key, Get it from https://build.nvidia.com/settings/api-keys
-NVIDIA_API_KEY = ""
+NVIDIA_API_KEY = "ADD_KEY_HERE"
 MODEL_NAME = 'meta/llama-4-scout-17b-16e-instruct'
 
 def prepare_image(image_input) -> tuple[bool, Union[str, bytes]]:
@@ -36,7 +36,9 @@ def prepare_image(image_input) -> tuple[bool, Union[str, bytes]]:
             img = Image.open(image_input)
             
         # Resize image while maintaining aspect ratio
-        img.thumbnail(MAX_IMAGE_SIZE, Image.LANCZOS)
+        
+        if img.width > MAX_IMAGE_SIZE[0] or img.height > MAX_IMAGE_SIZE[1]:
+            img.thumbnail(MAX_IMAGE_SIZE, Image.LANCZOS)
         
         # Convert to RGB if needed
         if img.mode != 'RGB':

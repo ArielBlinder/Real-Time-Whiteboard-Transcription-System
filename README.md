@@ -35,7 +35,7 @@
 
 ```
 /Backend        # Python Flask server, OCR, AI/LLM integration
-  /tests        # Comprehensive test suite (36 tests)
+  /tests        # Comprehensive test suite
 /Frontend       # React.js web application
 /Docs           # Additional documentation and design docs
 /requirements.txt # Python dependencies for backend
@@ -65,9 +65,9 @@ pip install -r requirements.txt
 ```
 
 - **API Keys:**
-  - Set your Nvidia NIM API key in `Backend/process_frames.py` (`API_KEY`) 
+  - Set your Nvidia NIM API key in `Backend/process_frames.py` (`API_KEY`)
   - Get it from https://build.nvidia.com/settings/api-keys
-  - Set your Google AI Studio (Gemini) API key in `Backend/process_video_text.py` (`GEMINI_API_KEY`) 
+  - Set your Google AI Studio (Gemini) API key in `Backend/process_video_text.py` (`GEMINI_API_KEY`)
   - Get if from https://aistudio.google.com/apikey
 
 ### 3. Frontend Setup (React)
@@ -92,14 +92,16 @@ npm install
    [https://www.gyan.dev/ffmpeg/builds/](https://www.gyan.dev/ffmpeg/builds/)
 
 2. **Extract**  
-   Use 7-Zip or WinRAR to extract the archive to:  
+   Use 7-Zip or WinRAR to extract the archive to:
+
    ```
    C:\ffmpeg
    ```
 
-3. **Add to PATH**  
-   - Open **Start** → search: `Edit environment variables for your account`  
-   - Under **User variables**, select `Path` → click **Edit**  
+3. **Add to PATH**
+
+   - Open **Start** → search: `Edit environment variables for your account`
+   - Under **User variables**, select `Path` → click **Edit**
    - Click **New** → paste:
      ```
      C:\ffmpeg\bin
@@ -115,13 +117,15 @@ npm install
 #### macOS
 
 **Install with Homebrew:**
+
 ```bash
 brew install ffmpeg
 ```
 
-*Don't have Homebrew? Install it from: https://brew.sh*
+_Don't have Homebrew? Install it from: https://brew.sh_
 
 **Verify Installation:**
+
 ```bash
 ffmpeg -version
 ```
@@ -129,12 +133,14 @@ ffmpeg -version
 #### Linux
 
 **Install FFmpeg:**
+
 ```bash
 sudo apt update
 sudo apt install ffmpeg
 ```
 
 **Verify Installation:**
+
 ```bash
 ffmpeg -version
 ```
@@ -176,10 +182,15 @@ ffmpeg -version
 
 ## Example
 
-- Upload a `.jpg` or `.mp4` file.
-- Wait for processing (OCR + AI processing).
-- Edit the result if needed.
-- Download as your preferred format.
+### Image Transcription
+
+![Whiteboard Image Transcription](frontend\src\Files\picture_text.png)
+_Example of transcribing handwritten math problems from a whiteboard image_
+
+### Video Transcription
+
+![Video Transcription Interface](frontend\src\Files\video_text.png)
+_Real-time transcription of educational content from video with timeline support_
 
 ---
 
@@ -226,24 +237,6 @@ pip install -r tests/test_requirements.txt
 # Run ALL tests
 python tests/run_tests.py
 
-### **Test Results Example**
-
-```bash
-🧪 Running All Tests in test_boardcast.py
-============================================================
-📊 Total Tests: 25 (18 unit + 4 integration + 1 performance + 2 edge cases)
-
-======================================= 25 passed in 11.41s =======================================
-
-✅ All tests completed successfully!
-
-📈 Test Coverage:
-   • API Integration (NVIDIA OCR + Gemini)
-   • Image & Video Processing
-   • Error Handling & Edge Cases
-   • Performance & Parallel Processing
-   • Flask Routes & Dependencies
-```
 
 ## Authors & Credits
 
@@ -276,3 +269,4 @@ python tests/run_tests.py
 This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
 
 ---
+```

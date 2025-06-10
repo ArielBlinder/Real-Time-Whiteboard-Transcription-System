@@ -44,6 +44,9 @@ def get_optimal_workers() -> int:
     elif cpu_cores <= 4:
         # Mid-range systems
         optimal_workers = min(8, cpu_cores * 2)
+    elif cpu_cores <= 6:
+        # Mid-high range systems
+        optimal_workers = min(12, cpu_cores * 2)
     elif cpu_cores <= 8:
         # High-end systems
         optimal_workers = min(16, cpu_cores * 2)

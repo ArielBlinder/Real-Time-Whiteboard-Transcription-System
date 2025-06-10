@@ -110,38 +110,3 @@ def extract_frames_to_memory(video_path: Path) -> List[Tuple[int, Image.Image, s
 
 def tmp_dir() -> tempfile.TemporaryDirectory:
     return tempfile.TemporaryDirectory(prefix="video_proc_")
-
-# Legacy function for backward compatibility.
-"""
-def extract_frames(video_path: Path, dst_folder: Path) -> list[Path]:
-    
-    # Legacy function for backward compatibility.
-    # Extract frames to files 
-    
-    check_dependencies()
-    
-    # Create the destination folder
-    dst_folder.mkdir(parents=True, exist_ok=True)
-    
-    # Create a pattern for the frame files
-    frame_pattern = dst_folder / "frame_%05d.jpg"
-    
-    # Run the command and check if it returns a successful exit code
-    subprocess.run(
-        [
-            FFMPEG,
-            "-hide_banner",
-            "-loglevel", "error",
-            "-i", str(video_path),
-            "-vf", (
-                f"fps=1/{EXTRACT_EVERY_SEC},"
-                f"scale={FRAME_SIZE}:{FRAME_SIZE}:force_original_aspect_ratio=decrease,"
-                f"pad={FRAME_SIZE}:{FRAME_SIZE}:(ow-iw)/2:(oh-ih)/2"
-            ),
-            "-q:v", "2",
-            str(frame_pattern)
-        ],
-        check=True
-    )
-    return sorted(dst_folder.glob("frame_*.jpg"))
-"""
