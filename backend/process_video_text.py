@@ -1,11 +1,11 @@
-import requests
-import json
 import os
 import time
 from typing import List, Tuple
+from google import genai
+from google.genai import types
 
-# IMPORTANT: Replace with your API key, Get it from https://openrouter.ai/settings/keys
-OPENROUTER_API_KEY = "" 
+# IMPORTANT: Replace with your API key, Get it from https://aistudio.google.com/apikey
+GEMINI_API_KEY = "ADD_KEY_HERE"
 
 def process_frames_with_gemini(frame_data: List[Tuple[str, str]]) -> str:
     # Process a list of OCR texts with timestamps from video frames using Gemini API
@@ -14,8 +14,8 @@ def process_frames_with_gemini(frame_data: List[Tuple[str, str]]) -> str:
         
     # Returns: Processed and cleaned transcription from Gemini giving the final result with timestamps
     
-    if not OPENROUTER_API_KEY:
-        raise ValueError("OPENROUTER_API_KEY environment variable is not set")
+    if not GEMINI_API_KEY:
+        raise ValueError("GEMINI_API_KEY environment variable is not set")
     
     if not frame_data:
         return "No frame data provided for processing"
@@ -80,90 +80,66 @@ Content describing the second concept...
 """ + combined_text
     )
 
-    headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json",
-    }
-        
-    data = {
-        "model": "google/gemini-2.0-flash-exp:free", 
-        "messages": [
-            {
-                "role": "user",
-                "content": [{"type": "text", "text": ai_prompt}] 
-            }
-        ]
-    }
-
     try:
-
         # Make the API request with exponential backoff retry logic
-        # OpenRouter API endpoint is unstable sometimes so we need to retry
-        response = make_api_request_with_retry(
-            url="https://openrouter.ai/api/v1/chat/completions",
-            headers=headers,
-            data=data
-        )
-
-        # Get the response data
-        response_data = response.json()
+        # Google AI Studio API can sometimes be unstable so we need to retry
+        result = make_api_request_with_retry(ai_prompt)
+        return result
         
-        # Check if the response contains a valid message
-        if response_data.get("choices") and response_data["choices"][0].get("message"):
-            result = response_data["choices"][0]["message"].get("content", "No content found in response.")
-            return result
-        else:
-            return "No valid response from Gemini API"
-        
-    except requests.exceptions.RequestException as e:
-        return f"API request failed: {str(e)}"
-    except json.JSONDecodeError as e:
-        return f"Could not decode JSON response: {str(e)}"
     except Exception as e:
         return f"An unexpected error occurred: {str(e)}"
 
-def make_api_request_with_retry(url: str, headers: dict, data: dict, max_retries: int = 3, initial_delay: float = 1.0) -> requests.Response:
+def make_api_request_with_retry(prompt: str, max_retries: int = 3, initial_delay: float = 1.0) -> str:
     
     # Make an API request with exponential backoff retry logic for rate limiting. 
-    # OpenRouter API endpoint is unstable sometimes so we need to retry
+    # Google AI Studio API can sometimes be unstable so we need to retry
     
     # Args:
-    #     url: The API endpoint URL
-    #     headers: Request headers
-    #     data: Request data
+    #     prompt: The text prompt to send to Gemini
     #     max_retries: Maximum number of retry attempts
     #     initial_delay: Initial delay in seconds before first retry
         
-    # Returns: requests.Response: The API response
+    # Returns: str: The API response content
 
     delay = initial_delay
     
     for attempt in range(max_retries):
         try:
-            # Send the request to the API
-            response = requests.post(
-                url=url,
-                headers=headers,
-                data=json.dumps(data),
-                timeout=180
+            # Create the Gemini client
+            client = genai.Client(
+                api_key=GEMINI_API_KEY,
             )
+
+            model = "gemini-2.0-flash"
+            contents = [
+                types.Content(
+                    role="user",
+                    parts=[
+                        types.Part.from_text(text=prompt),
+                    ],
+                ),
+            ]
+            generate_content_config = types.GenerateContentConfig(
+                response_mime_type="text/plain",
+            )
+
+            # Collect the streaming response
+            result = ""
+            for chunk in client.models.generate_content_stream(
+                model=model,
+                contents=contents,
+                config=generate_content_config,
+            ):
+                if chunk.text:
+                    result += chunk.text
             
-            # If we get a 429, wait and retry
-            if response.status_code == 429:
-                if attempt < max_retries - 1:  # Don't sleep on the last attempt
-                    time.sleep(delay)
-                    delay *= 2  # Exponential backoff
-                    continue
-            # Raise an error if the response is not successful
-            response.raise_for_status()
+            # Return the complete result
+            return result
             
-            # Return the response
-            return response
-            
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             if attempt == max_retries - 1:  # Last attempt
                 raise e
             time.sleep(delay)
             delay *= 2  # Exponential backoff
             
-    raise requests.exceptions.RequestException("Max retries exceeded")
+    raise Exception("Max retries exceeded")

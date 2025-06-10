@@ -17,7 +17,7 @@ from app import (
     process_frame_with_order, process_video_frames_parallel
 )
 from process_frames import prepare_image, transcribe_image, NVIDIA_API_KEY
-from process_video_text import process_frames_with_gemini, make_api_request_with_retry, OPENROUTER_API_KEY
+from process_video_text import process_frames_with_gemini, make_api_request_with_retry, GEMINI_API_KEY
 from video_utils import check_dependencies, extract_frames_to_memory, DependencyError
 
 # UNIT TESTS 
@@ -27,7 +27,7 @@ class TestAPIKeyValidation:
     
     # Test 1: Valid API keys
     @patch('app.NVIDIA_API_KEY', 'valid_nvidia_key')
-    @patch('app.OPENROUTER_API_KEY', 'valid_openrouter_key')
+    @patch('app.GEMINI_API_KEY', 'valid_gemini_key')
     def test_check_api_keys_valid(self):
         # Test that valid API keys pass validation
         is_valid, error_msg = check_api_keys()
@@ -36,13 +36,13 @@ class TestAPIKeyValidation:
     
     # Test 2: Invalid API keys
     @patch('app.NVIDIA_API_KEY', 'ADD_KEY_HERE')
-    @patch('app.OPENROUTER_API_KEY', 'ADD_KEY_HERE')
+    @patch('app.GEMINI_API_KEY', 'ADD_KEY_HERE')
     def test_check_api_keys_invalid(self):
         # Test that placeholder API keys fail validation with appropriate error messages
         is_valid, error_msg = check_api_keys()
         assert is_valid is False
         assert "NVIDIA API key not set" in error_msg
-        assert "OpenRouter API key not set" in error_msg
+        assert "Google AI Studio API key not set" in error_msg
 
 
 class TestWorkerOptimization:
@@ -140,12 +140,13 @@ class TestFrameProcessing:
         # Test processing a single frame while maintaining order
         mock_transcribe.return_value = "Test transcription"
         test_image = Image.new('RGB', (100, 100))
-        frame_data = (5, test_image)
+        frame_data = (5, test_image, "0:01:30")
         
-        frame_number, text = process_frame_with_order(frame_data)
+        frame_number, text, timestamp = process_frame_with_order(frame_data)
         
         assert frame_number == 5
         assert text == "Test transcription"
+        assert timestamp == "0:01:30"
         mock_transcribe.assert_called_once_with(test_image)
     
     # Test 11: Parallel frame processing
@@ -154,13 +155,14 @@ class TestFrameProcessing:
         # Test successful parallel processing of multiple frames
         mock_transcribe.return_value = "Test text"
         
-        frames = [(i, Image.new('RGB', (100, 100))) for i in range(5)]
+        frames = [(i, Image.new('RGB', (100, 100)), f"0:0{i}:30") for i in range(5)]
         results = process_video_frames_parallel(frames, max_workers=2)
         
         assert len(results) == 5
-        # All results should be valid text
-        for text in results:
+        # All results should be valid text with timestamps
+        for text, timestamp in results:
             assert text == "Test text"
+            assert timestamp.startswith("0:0")
 
 
 class TestVideoProcessing:
@@ -168,29 +170,25 @@ class TestVideoProcessing:
     
     # Test 12: Gemini processing success
     @patch('process_video_text.make_api_request_with_retry')
-    @patch('process_video_text.OPENROUTER_API_KEY', 'valid_key')
+    @patch('process_video_text.GEMINI_API_KEY', 'valid_key')
     def test_process_frames_with_gemini_success(self, mock_api_request):
         # Test successful processing of frame texts with Gemini API
-        mock_response = Mock()
-        mock_response.json.return_value = {
-            "choices": [{"message": {"content": "Cleaned and organized transcription text"}}]
-        }
-        mock_api_request.return_value = mock_response
+        mock_api_request.return_value = "Cleaned and organized transcription text"
         
-        frame_texts = ["Text from frame 1", "Text from frame 2"]
-        result = process_frames_with_gemini(frame_texts)
+        frame_data = [("Text from frame 1", "0:01:00"), ("Text from frame 2", "0:02:00")]
+        result = process_frames_with_gemini(frame_data)
         
         assert result == "Cleaned and organized transcription text"
         mock_api_request.assert_called_once()
     
     # Test 13: Gemini processing without API key
-    @patch('process_video_text.OPENROUTER_API_KEY', '')
+    @patch('process_video_text.GEMINI_API_KEY', '')
     def test_process_frames_with_gemini_no_api_key(self):
         # Test Gemini processing fails gracefully without API key
-        frame_texts = ["Sample text"]
+        frame_data = [("Sample text", "0:01:00")]
         
-        with pytest.raises(ValueError, match="OPENROUTER_API_KEY environment variable is not set"):
-            process_frames_with_gemini(frame_texts)
+        with pytest.raises(ValueError, match="GEMINI_API_KEY environment variable is not set"):
+            process_frames_with_gemini(frame_data)
 
 
 class TestFlaskRoutes:
@@ -256,22 +254,23 @@ class TestAPIRetryLogic:
     # Test API retry mechanism
     
     # Test 18: Successful API request
-    @patch('requests.post')
-    def test_make_api_request_success(self, mock_post):
+    @patch('process_video_text.genai.Client')
+    @patch('process_video_text.GEMINI_API_KEY', 'valid_key')
+    def test_make_api_request_success(self, mock_client_class):
         # Test successful API request on first attempt
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {"choices": [{"message": {"content": "Success"}}]}
-        mock_post.return_value = mock_response
+        mock_client = Mock()
+        mock_client_class.return_value = mock_client
         
-        url = "https://api.example.com/test"
-        headers = {"Authorization": "Bearer test"}
-        data = {"model": "test", "messages": []}
+        # Mock the streaming response
+        mock_chunk = Mock()
+        mock_chunk.text = "Success"
+        mock_client.models.generate_content_stream.return_value = [mock_chunk]
         
-        result = make_api_request_with_retry(url, headers, data)
+        prompt = "Test prompt"
+        result = make_api_request_with_retry(prompt)
         
-        assert result.json() == {"choices": [{"message": {"content": "Success"}}]}
-        mock_post.assert_called_once()
+        assert result == "Success"
+        mock_client.models.generate_content_stream.assert_called_once()
 
 # INTEGRATION TESTS
 
@@ -300,18 +299,18 @@ class TestGeminiIntegration:
     
     def setup_method(self):
         # Check if Gemini integration tests can run
-        if not OPENROUTER_API_KEY or OPENROUTER_API_KEY == "ADD_KEY_HERE":
-            pytest.skip("Gemini integration tests require a valid OPENROUTER_API_KEY")
+        if not GEMINI_API_KEY or GEMINI_API_KEY == "ADD_KEY_HERE":
+            pytest.skip("Gemini integration tests require a valid GEMINI_API_KEY")
     
     # Test 20: Real Gemini API integration
     def test_gemini_integration_real_api(self):
         # Test the Gemini integration with sample OCR data using real API
-        sample_frame_texts = [
-            "Mathematical Analysis\nChapter 3: Derivatives",
-            "Definition: The derivative of f(x) at point a\nf'(a) = lim(h→0) [f(a+h) - f(a)]/h"
+        sample_frame_data = [
+            ("Mathematical Analysis\nChapter 3: Derivatives", "0:01:00"),
+            ("Definition: The derivative of f(x) at point a\nf'(a) = lim(h→0) [f(a+h) - f(a)]/h", "0:02:00")
         ]
         
-        result = process_frames_with_gemini(sample_frame_texts)
+        result = process_frames_with_gemini(sample_frame_data)
         
         assert isinstance(result, str)
         assert len(result) > 0
@@ -321,7 +320,7 @@ class TestGeminiIntegration:
     def test_empty_input_real_api(self):
         # Test handling of empty input with real API
         result = process_frames_with_gemini([])
-        assert result == "No frame texts provided for processing"
+        assert result == "No frame data provided for processing"
 
 
 @pytest.mark.integration
@@ -332,8 +331,8 @@ class TestEndToEndIntegration:
         # Check if end-to-end integration tests can run
         if not NVIDIA_API_KEY or NVIDIA_API_KEY == "ADD_KEY_HERE":
             pytest.skip("End-to-end tests require a valid NVIDIA_API_KEY")
-        if not OPENROUTER_API_KEY or OPENROUTER_API_KEY == "ADD_KEY_HERE":
-            pytest.skip("End-to-end tests require a valid OPENROUTER_API_KEY")
+        if not GEMINI_API_KEY or GEMINI_API_KEY == "ADD_KEY_HERE":
+            pytest.skip("End-to-end tests require a valid GEMINI_API_KEY")
     
     # Test 22: Full pipeline test (NVIDIA OCR + Gemini processing)
     def test_full_pipeline_real_apis(self):
@@ -352,13 +351,15 @@ class TestEndToEndIntegration:
         
         # Step 2: Process OCR results with Gemini (if we have valid OCR output)
         if ocr_results:
-            final_result = process_frames_with_gemini(ocr_results)
+            # Convert to (text, timestamp) format
+            frame_data = [(text, f"0:0{i}:00") for i, text in enumerate(ocr_results)]
+            final_result = process_frames_with_gemini(frame_data)
             assert isinstance(final_result, str)
             assert not final_result.startswith("API request failed")
         else:
             # If no valid OCR results, test with placeholder text
-            placeholder_texts = ["Sample mathematical content for testing"]
-            final_result = process_frames_with_gemini(placeholder_texts)
+            placeholder_data = [("Sample mathematical content for testing", "0:01:00")]
+            final_result = process_frames_with_gemini(placeholder_data)
             assert isinstance(final_result, str)
             assert len(final_result) > 0
 
@@ -376,8 +377,8 @@ class TestPerformance:
         
         mock_transcribe.return_value = "Test text"
         
-        # Create 50 frames
-        frames = [(i, Image.new('RGB', (100, 100))) for i in range(50)]
+        # Create 50 frames with timestamps
+        frames = [(i, Image.new('RGB', (100, 100)), f"0:{i:02d}:00") for i in range(50)]
         
         start_time = time.time()
         results = process_video_frames_parallel(frames, max_workers=4)
@@ -404,11 +405,11 @@ class TestEdgeCases:
         # Test processing a single frame
         mock_transcribe.return_value = "Single frame text"
         
-        frames = [(0, Image.new('RGB', (100, 100)))]
+        frames = [(0, Image.new('RGB', (100, 100)), "0:01:00")]
         results = process_video_frames_parallel(frames, max_workers=2)
         
         assert len(results) == 1
-        assert results[0] == "Single frame text"
+        assert results[0] == ("Single frame text", "0:01:00")
 
 
 if __name__ == "__main__":

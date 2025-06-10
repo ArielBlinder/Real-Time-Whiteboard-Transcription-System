@@ -79,7 +79,7 @@ def main():
     atexit.register(cleanup, processes)
     
     # Open browser after a short delay
-    webbrowser.open('http://localhost:5177')
+    webbrowser.open('http://localhost:5173')
     
     print("Application Working!")
     print("Press Ctrl+C to stop all server.")
