@@ -1,7 +1,7 @@
 Flask==3.1.1
 flask-cors==6.0.0
 Pillow==11.2.1
-requests==2.32.3
+requests==2.32.4
 psutil==6.1.1
 pywin32==310
 google-genai
