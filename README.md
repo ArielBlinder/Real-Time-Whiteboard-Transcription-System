@@ -64,11 +64,26 @@ cd Real-Time-Whiteboard-Transcription-System
 pip install -r requirements.txt
 ```
 
-- **API Keys:**
-  - Set your Nvidia NIM API key in `Backend/process_frames.py` (`API_KEY`)
-  - Get it from https://build.nvidia.com/settings/api-keys
-  - Set your Google AI Studio (Gemini) API key in `Backend/process_video_text.py` (`GEMINI_API_KEY`)
-  - Get if from https://aistudio.google.com/apikey
+- **Environment Variables Setup:**
+  
+  The application uses `.env` file to securely manage API keys.
+  
+  1. **Copy the template file:**
+     ```bash
+     cp env_template.txt .env
+     ```
+  
+  2. **Get your API keys:**
+     - **NVIDIA API Key:** Get it from https://build.nvidia.com/settings/api-keys
+     - **Google AI Studio API Key:** Get it from https://aistudio.google.com/apikey
+  
+  3. **Edit the `.env` file** and replace the placeholder values:
+     ```env
+     NVIDIA_API_KEY=your_actual_nvidia_api_key_here
+     GEMINI_API_KEY=your_actual_gemini_api_key_here
+     ```
+  
+  **Security Note:** The `.env` file is automatically ignored by Git to protect your API keys.
 
 ### 3. Frontend Setup (React)
 

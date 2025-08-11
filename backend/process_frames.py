@@ -2,9 +2,14 @@ import base64
 import io
 import json
 import requests
+import os
 from PIL import Image
 from typing import Union
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Maximum size of the image
 MAX_IMAGE_SIZE = (800, 800)
@@ -12,8 +17,8 @@ MAX_IMAGE_SIZE = (800, 800)
 MAX_BASE64_SIZE = 180_000
 # API URL
 API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
-# IMPORTANT: Replace with your API key, Get it from https://build.nvidia.com/settings/api-keys
-NVIDIA_API_KEY = "ADD_KEY_HERE"
+# Load NVIDIA API key from environment variable or use fallback
+NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY")
 MODEL_NAME = 'meta/llama-4-scout-17b-16e-instruct'
 
 def prepare_image(image_input) -> tuple[bool, Union[str, bytes]]:

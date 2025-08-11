@@ -3,9 +3,10 @@ import time
 from typing import List, Tuple
 from google import genai
 from google.genai import types
+from dotenv import load_dotenv
 
-# IMPORTANT: Replace with your API key, Get it from https://aistudio.google.com/apikey
-GEMINI_API_KEY = "ADD_KEY_HERE"
+# Load Gemini API key from environment variable or use fallback
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 def process_frames_with_gemini(frame_data: List[Tuple[str, str]]) -> str:
     # Process a list of OCR texts with timestamps from video frames using Gemini API

@@ -7,6 +7,10 @@ from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Tuple
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
@@ -19,11 +23,11 @@ def check_api_keys() -> tuple[bool, str]:
     
     errors = []
     
-    if NVIDIA_API_KEY == "ADD_KEY_HERE":
-        errors.append("NVIDIA API key not set.\nPlease add your API key in process_frames.py file.\nGet your API key from https://build.nvidia.com/settings/api-keys")
+    if not NVIDIA_API_KEY or NVIDIA_API_KEY == "your_nvidia_api_key_here":
+        errors.append("NVIDIA API key not set.\nPlease set NVIDIA_API_KEY in your .env file.\nGet your API key from https://build.nvidia.com/settings/api-keys")
     
-    if GEMINI_API_KEY == "ADD_KEY_HERE":
-        errors.append("Google AI Studio API key not set.\nPlease add your API key in process_video_text.py file.\nGet your API key from https://aistudio.google.com/apikey")
+    if not GEMINI_API_KEY or GEMINI_API_KEY == "your_gemini_api_key_here":
+        errors.append("Google AI Studio API key not set.\nPlease set GEMINI_API_KEY in your .env file.\nGet your API key from https://aistudio.google.com/apikey")
     
     if errors:
         return False, "\n\n".join(errors)
